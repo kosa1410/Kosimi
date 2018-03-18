@@ -1,0 +1,1 @@
+global.SPEED = 10;
