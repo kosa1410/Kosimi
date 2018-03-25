@@ -1,14 +1,17 @@
-<canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
+<canvas id="ctx" width="550" height="550" style="border:1px solid #000000;"></canvas>
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script>
-    var ctx = document.getElementById("ctx").getContext("2d");
+    var canvas = document.getElementById("ctx")
+    var ctx = canvas.getContext("2d");
+
+    var heroImg = new Image()
+    heroImg.src = 'client/images/x.png';
     
     var socket = io();
-
     socket.on('newPosition', function(data) {
-        ctx.clearRect(0,0,500,500);
+        ctx.clearRect(0,0,canvas.height, canvas.width);
         for(var i=0; i<data.length; i++) {
-            ctx.fillText('Player', data[i].x, data[i].y, 80, 80);
+            ctx.drawImage(heroImg, data[i].x, data[i].y, 50, 50);
         }
     })
 
@@ -17,6 +20,10 @@
             socket.emit('move', {'directory': 'left'})
         } else if(e.keyCode === 39) {
             socket.emit('move', {'directory': 'right'})
+        } else if(e.keyCode === 38) {
+            socket.emit('move', {'directory': 'up'})
+        } else if(e.keyCode === 40) {
+            socket.emit('move', {'directory': 'down'})
         }
     })
 </script>

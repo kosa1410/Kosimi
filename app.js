@@ -6,9 +6,6 @@ require('./variables.js');
 app.get('/',function(req, res) {
     res.sendFile(__dirname + '/client/index.html');
 });
-app.get('/3d', function(req, res) {
-    console.log(req.path)
-})
 app.use('/client',express.static(__dirname + '/client'));
 
 serv.listen(2000);
@@ -22,7 +19,7 @@ io.sockets.on('connection', function(socket) {
     PLAYERS_ONLINE++;
     socket.id = Math.random();
     socket.x = 0;
-    socket.y = 495;
+    socket.y = 500;
     SOCKET_LIST[socket.id] = socket
     console.log("new socket connected")
     console.log('Players online: ' + PLAYERS_ONLINE)
@@ -35,9 +32,21 @@ io.sockets.on('connection', function(socket) {
 
     socket.on('move', function(data) {
         if(data.directory === 'left') {
-            socket.x -= SPEED;
+            if(!(socket.x - FIELD < 0)) {
+                socket.x -= FIELD;
+            }
         } else if(data.directory === 'right') {
-            socket.x += SPEED;
+            if(!(socket.x + FIELD > 500)) {
+                socket.x += FIELD;
+            }
+        } else if(data.directory === 'up') {
+            if(!(socket.y - FIELD < 0)) {
+                socket.y -= FIELD;
+            }
+        } else if(data.directory === 'down') {
+            if(!(socket.y + FIELD > 500)) {
+                socket.y += FIELD;
+            }
         }
     })
 })
