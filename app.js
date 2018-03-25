@@ -6,24 +6,31 @@ require('./variables.js');
 app.get('/',function(req, res) {
     res.sendFile(__dirname + '/client/index.html');
 });
+app.get('/3d', function(req, res) {
+    console.log(req.path)
+})
 app.use('/client',express.static(__dirname + '/client'));
 
 serv.listen(2000);
 console.log('Server started');
 
 var SOCKET_LIST = {}
+var room = {link: '3bnr5t', players: {}}
 
 var io = require('socket.io')(serv,{});
 io.sockets.on('connection', function(socket) {
+    PLAYERS_ONLINE++;
     socket.id = Math.random();
     socket.x = 0;
     socket.y = 495;
     SOCKET_LIST[socket.id] = socket
-    console.log("socket connected")
+    console.log("new socket connected")
+    console.log('Players online: ' + PLAYERS_ONLINE)
 
     socket.on('disconnect', function() {
         delete SOCKET_LIST[socket.id]
         console.log("socket disconnected");
+        PLAYERS_ONLINE--;
     })  
 
     socket.on('move', function(data) {
