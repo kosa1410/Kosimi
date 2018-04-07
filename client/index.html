@@ -3,6 +3,12 @@
 <script>
     var canvas = document.getElementById("ctx")
     var ctx = canvas.getContext("2d");
+    var speed_update = {
+        left: false,
+        right: false,
+        up: false,
+        down: false
+    }
 
     var heroImg = new Image()
     heroImg.src = 'client/images/x.png';
@@ -17,13 +23,29 @@
 
     document.addEventListener('keydown', function(e) {
         if(e.keyCode === 37) {
-            socket.emit('move', {'directory': 'left'})
+            if(speed_update.left === false) {
+                socket.emit('move', {'directory': 'left'})
+                speed_update.left = true
+                setTimeout(function() { speed_update.left = false }, 200)
+            }
         } else if(e.keyCode === 39) {
-            socket.emit('move', {'directory': 'right'})
+            if(speed_update.right === false) {
+                socket.emit('move', {'directory': 'right'})
+                speed_update.right = true
+                setTimeout(function() { speed_update.right = false }, 200)
+            }
         } else if(e.keyCode === 38) {
-            socket.emit('move', {'directory': 'up'})
+            if(speed_update.up === false) {
+                socket.emit('move', {'directory': 'up'})
+                speed_update.up = true
+                setTimeout(function() { speed_update.up = false }, 200)
+            }
         } else if(e.keyCode === 40) {
-            socket.emit('move', {'directory': 'down'})
+            if(speed_update.down === false) {
+                socket.emit('move', {'directory': 'down'})
+                speed_update.down = true
+                setTimeout(function() { speed_update.down = false }, 200)
+            }
         }
-    })
+    });
 </script>
