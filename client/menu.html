@@ -8,7 +8,7 @@
 	var bombImage = new Image();
 	bombImage.src = 'images/Bomba.png';
 	//var bombPointer = {Image:bombImage,x : 0 ,y:10};
-	var option1 = {value:"a", label : "opcja1",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
+	var option1 = {value:"a", label : "Start game",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
 	var option2 = {value:"b", label : "opcja2",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
 	var option3 = {value:"c", label : "opcja3",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
 
@@ -62,8 +62,13 @@
             }
             
         } else if(e.keyCode === 13) {
-            //socket.emit('move', {'directory': 'down'})
-            // obsluga wyboru - przekazanie wartosci aktywnej opcji (option, active)
+			if(option1.actv === true) {
+				window.location.href = '/game';
+			} else if(option2.actv === true) {
+
+			} else if(option3.actv === true) {
+
+			}
         }
     })
 

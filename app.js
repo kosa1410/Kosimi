@@ -3,10 +3,17 @@ var app = express();
 var serv = require('http').Server(app)
 require('./variables.js');
 
-app.get('/',function(req, res) {
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/client/menu.html');
+})
+
+app.get('/game', function(req, res) {
     res.sendFile(__dirname + '/client/index.html');
 });
+
+app.use(express.static(__dirname + '/client'));
 app.use('/client',express.static(__dirname + '/client'));
+
 
 serv.listen(2000);
 console.log('Server started');
