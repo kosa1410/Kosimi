@@ -44,32 +44,32 @@
             }
         }
         for(var i=0; i<data.length; i++) {
-            ctx.drawImage(heroImg, data[i].x, data[i].y, 50, 50);
+            ctx.drawImage(heroImg, map[data[i].x][data[i].y].x, map[data[i].x][data[i].y].y, 50, 50);
         }
     })
 
     document.addEventListener('keydown', function(e) {
         if(e.keyCode === 37) {
             if(speed_update.left === false) {
-                socket.emit('move', {'directory': 'left'})
+                socket.emit('move', {'directory': 'left', map: map})
                 speed_update.left = true
                 setTimeout(function() { speed_update.left = false }, 100)
             }
         } else if(e.keyCode === 39) {
             if(speed_update.right === false) {
-                socket.emit('move', {'directory': 'right'})
+                socket.emit('move', {'directory': 'right', map: map})
                 speed_update.right = true
                 setTimeout(function() { speed_update.right = false }, 100)
             }
         } else if(e.keyCode === 38) {
             if(speed_update.up === false) {
-                socket.emit('move', {'directory': 'up'})
+                socket.emit('move', {'directory': 'up', map: map})
                 speed_update.up = true
                 setTimeout(function() { speed_update.up = false }, 100)
             }
         } else if(e.keyCode === 40) {
             if(speed_update.down === false) {
-                socket.emit('move', {'directory': 'down'})
+                socket.emit('move', {'directory': 'down', map: map})
                 speed_update.down = true
                 setTimeout(function() { speed_update.down = false }, 100)
             }
