@@ -19,6 +19,7 @@ serv.listen(2000);
 console.log('Server started');
 
 var SOCKET_LIST = {}
+var bombs = []
 var room = {link: '3bnr5t', players: {}}
 
 var io = require('socket.io')(serv,{});
@@ -56,6 +57,13 @@ io.sockets.on('connection', function(socket) {
             }
         }
     })
+
+    socket.on('put_bomb', function(data) {
+        bombs.push({
+            x: socket.x,
+            y: socket.y
+        })
+    })
 })
 
 setInterval(function() {
@@ -67,8 +75,17 @@ setInterval(function() {
             y: socket.y
         })
     }
+    bomb_pack = [];
+    for(var i in SOCKET_LIST) {
+        var socket = SOCKET_LIST[i]
+        bomb_pack.push({
+            x: socket.x,
+            y: socket.y
+        })
+    }
     for(var i in SOCKET_LIST) {
         var socket = SOCKET_LIST[i]
         socket.emit('newPosition', pack)
+        socket.emit('bombs_positions', bomb_pack)
     }
 }, 1000/25)
