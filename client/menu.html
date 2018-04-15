@@ -1,0 +1,75 @@
+<canvas id="ctx" width="550" height="550" style="border:1px solid #000000;"></canvas>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script>
+	var canvas = document.getElementById("ctx")
+    var ctx = canvas.getContext("2d");
+	ctx.font="20px Georgia";
+
+	var bombImage = new Image();
+	bombImage.src = 'images/bomb.png';
+	//var bombPointer = {Image:bombImage,x : 0 ,y:10};
+	var option1 = {value:"a", label : "Start game",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
+	var option2 = {value:"b", label : "opcja2",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
+	var option3 = {value:"c", label : "opcja3",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
+
+	var menu = [option1,option2,option3];
+
+		var drawmenu = function(){
+		for(let i = 0, length1 = menu.length; i < length1; i++){
+				
+				ctx.fillText(menu[i].label,menu[i].x,(menu[i].y+(i*40)));
+
+			}
+
+		}
+
+	var drawPointer = function(){
+		for(let i = 0, length1 = menu.length; i < length1; i++){
+			if(menu[i].actv === true ){
+
+				ctx.drawImage(bombImage,menu[i].x-50,((menu[i].y-25)+(i*40)));
+			}
+		}
+	}
+	window.onload = function() {
+		option1.actv = true;
+		drawmenu();
+		drawPointer();
+	} 	
+
+	    document.addEventListener('keydown', function(e) {
+        if(e.keyCode === 38) {
+            for(let i = 0, length1 = menu.length; i < length1; i++){
+	            if (menu[i].actv === true && i > 0) {
+	           		 	menu[i].actv = false;
+	           		 	menu[i-1].actv = true;
+	           		 	ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+	           		 	drawmenu();
+	           		 	drawPointer();
+	           		 	break;
+	            }
+            }
+        } else if(e.keyCode === 40) {
+            for(let i = 0, length1 = menu.length; i < length1; i++){
+	            if (menu[i].actv === true && i < length1-1) {
+	           		 	menu[i].actv = false;
+	           		 	menu[i+1].actv = true;
+	           		 	ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+	           		 	drawmenu();
+	           		 	drawPointer();
+	           		 	break;
+	            }
+            }
+            
+        } else if(e.keyCode === 13) {
+			if(option1.actv === true) {
+				window.location.href = '/game';
+			} else if(option2.actv === true) {
+
+			} else if(option3.actv === true) {
+
+			}
+        }
+    })
+
+</script>
