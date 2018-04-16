@@ -21,6 +21,7 @@ console.log('Server started');
 var SOCKET_LIST = {}
 var bombs = []
 var room = {link: '3bnr5t', players: {}}
+var _socket = {}
 
 var map = [
     [{type: 'floor', x: 0, y: 0},   {type: 'floor', x: 50, y: 0},   {type: 'floor', x: 100, y: 0},   {type: 'floor', x: 150, y: 0},   {type: 'floor', x: 200, y: 0},   {type: 'floor', x: 250, y: 0},   {type: 'floor', x: 300, y: 0},   {type: 'floor', x: 350, y: 0},   {type: 'floor', x: 400, y: 0},   {type: 'floor', x: 450, y: 0}, {type: 'floor', x: 500, y: 0}],
@@ -44,7 +45,10 @@ io.sockets.on('connection', function(socket) {
     socket.y = 0;
     socket.bombTime = 35;
     socket.bombStrength = 1;
+    socket.bombLimit = 1;
+    socket.bombsUp = 0;
     SOCKET_LIST[socket.id] = socket
+    _socket = socket;
     console.log("new socket connected")
     console.log('Players online: ' + PLAYERS_ONLINE)
 
@@ -55,6 +59,7 @@ io.sockets.on('connection', function(socket) {
     })  
 
     socket.on('move', function(data) {
+        socket = _socket
         if(data.directory === 'left') {
             if(!(socket.y - 1 < 0 || map[socket.x][socket.y - 1].type === 'wall')) {
                 map[socket.x][socket.y].player = false;
@@ -83,13 +88,16 @@ io.sockets.on('connection', function(socket) {
     })
 
     socket.on('put_bomb', function(data) {
-        map[socket.x][socket.y].bomb = true
-        bombs.push({
-            x: socket.x,
-            y: socket.y,
-            timeToExplode: socket.bombTime,
-            owner: socket
-        })
+        if(socket.bombsUp < socket.bombLimit) {
+            map[socket.x][socket.y].bomb = true
+            bombs.push({
+                x: socket.x,
+                y: socket.y,
+                timeToExplode: socket.bombTime,
+                owner: socket
+            })
+            socket.bombsUp++;
+        }
     })
 })
 
@@ -99,6 +107,9 @@ setInterval(function() {
         bomb.timeToExplode--;
         if(bomb.timeToExplode <= 0) {
             map[bomb.x][bomb.y].bomb = false
+            _socket.bombsUp--;
+            SOCKET_LIST[_socket.id] = _socket
+            delete bombs[i]
         }
     }
     var pack = {map: map};
