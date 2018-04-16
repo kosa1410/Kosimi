@@ -72,6 +72,7 @@ io.sockets.on('connection', function(socket) {
     socket.emit("newPosition", pack)
 
     socket.on('disconnect', function() {
+        map[socket.x][socket.y].player = false
         delete SOCKET_LIST[socket.id]
         console.log("socket disconnected");
         PLAYERS_ONLINE--;
