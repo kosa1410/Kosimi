@@ -190,4 +190,22 @@ function generateExplode(bomb) {
         explodesToSend
     )
     _explodes.push(explodes);
+
+    check_if_user_is_in_explosion_area();
+}
+
+function check_if_user_is_in_explosion_area() {
+    for(var socket_num in SOCKET_LIST) {
+        var socket = SOCKET_LIST[socket_num]
+        for(var i in _explodes) {
+            for(var j in _explodes[i][1]) {
+                if(socket.x === _explodes[i][1][j].x && socket.y === _explodes[i][1][j].y) {
+                    map[socket.x][socket.y].player = false
+                    map[10][0].player = true
+                    SOCKET_LIST[socket_num].x = 10
+                    SOCKET_LIST[socket_num].y = 0
+                }
+            }
+        }
+    }
 }
