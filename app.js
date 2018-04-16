@@ -110,6 +110,7 @@ setInterval(function() {
             _socket.bombsUp--;
             SOCKET_LIST[_socket.id] = _socket
             delete bombs[i]
+            generateExplode(bomb)
         }
     }
     var pack = {map: map};
@@ -118,3 +119,38 @@ setInterval(function() {
         socket.emit('newPosition', pack)
     }
 }, 1000/25)
+
+function generateExplode(bomb) {
+    var wallUp, wallDown, wallLeft, wallRight;
+    map[bomb.x][bomb.y].explode = true
+    for(var i=0; i<bomb.owner.bombStrength+1; i++) {
+        if(!(bomb.x - i < 0)) {
+            if(map[bomb.x - i][bomb.y].type !== 'wall' && wallUp !== true) {
+                map[bomb.x - i][bomb.y].explode = true
+            } else {
+                wallUp = true;
+            }
+        }
+        if(!(bomb.x + i > 10)) {
+            if(map[bomb.x + i][bomb.y].type !== 'wall' && wallDown !== true) {
+                map[bomb.x + i][bomb.y].explode = true
+            } else {
+                wallDown = true;
+            }
+        }
+        if(!(bomb.y + i > 10)) {
+            if(map[bomb.x][bomb.y + i].type !== 'wall' && wallRight !== true) {
+                map[bomb.x][bomb.y + i].explode = true
+            } else {
+                wallRight = true;
+            }
+        }
+        if(!(bomb.y - i < 0)) {
+            if(map[bomb.x][bomb.y - i].type !== 'wall' && wallLeft !== true) {
+                map[bomb.x][bomb.y - i].explode = true
+            } else {
+                wallLeft = true;
+            }
+        }
+    }
+}

@@ -21,6 +21,9 @@
     
     var floorImg = new Image()
     floorImg.src = 'client/images/floor.png';
+
+    var explodeImg = new Image()
+    explodeImg.src = 'client/images/wood.png';
     
     var socket = io();
     socket.on('newPosition', function(data) {
@@ -33,6 +36,9 @@
                 }
                 if(data.map[i][j].player) {
                     ctx.drawImage(heroImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
+                }
+                if(data.map[i][j].explode) {
+                    ctx.drawImage(explodeImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
                 }
             }
         }
