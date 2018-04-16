@@ -22,6 +22,7 @@ var SOCKET_LIST = {}
 var bombs = []
 var room = {link: '3bnr5t', players: {}}
 var _socket = {}
+var _explodes = [];
 
 var map = [
     [{type: 'floor', x: 0, y: 0},   {type: 'floor', x: 50, y: 0},   {type: 'floor', x: 100, y: 0},   {type: 'floor', x: 150, y: 0},   {type: 'floor', x: 200, y: 0},   {type: 'floor', x: 250, y: 0},   {type: 'floor', x: 300, y: 0},   {type: 'floor', x: 350, y: 0},   {type: 'floor', x: 400, y: 0},   {type: 'floor', x: 450, y: 0}, {type: 'floor', x: 500, y: 0}],
@@ -113,6 +114,16 @@ setInterval(function() {
             generateExplode(bomb)
         }
     }
+    for(var i in _explodes) {
+        if(_explodes[i][0].timeToDisappear > 0) {
+            _explodes[i][0].timeToDisappear--;
+        } else {
+            for(var j in _explodes[i][1]) {
+                map[_explodes[i][1][j].x][_explodes[i][1][j].y].explode = false
+            }
+            delete _explodes[i]
+        }
+    }
     var pack = {map: map};
     for(var i in SOCKET_LIST) {
         var socket = SOCKET_LIST[i]
@@ -123,10 +134,20 @@ setInterval(function() {
 function generateExplode(bomb) {
     var wallUp, wallDown, wallLeft, wallRight;
     map[bomb.x][bomb.y].explode = true
+    var explodes = [{timeToDisappear: 15}]
+    var explodesToSend = [];
+    explodesToSend.push({
+        x: bomb.x,
+        y: bomb.y
+    })
     for(var i=0; i<bomb.owner.bombStrength+1; i++) {
         if(!(bomb.x - i < 0)) {
             if(map[bomb.x - i][bomb.y].type !== 'wall' && wallUp !== true) {
                 map[bomb.x - i][bomb.y].explode = true
+                explodesToSend.push({
+                    x: bomb.x - i,
+                    y: bomb.y
+                })
             } else {
                 wallUp = true;
             }
@@ -134,6 +155,10 @@ function generateExplode(bomb) {
         if(!(bomb.x + i > 10)) {
             if(map[bomb.x + i][bomb.y].type !== 'wall' && wallDown !== true) {
                 map[bomb.x + i][bomb.y].explode = true
+                explodesToSend.push({
+                    x: bomb.x + i,
+                    y: bomb.y
+                })
             } else {
                 wallDown = true;
             }
@@ -141,6 +166,10 @@ function generateExplode(bomb) {
         if(!(bomb.y + i > 10)) {
             if(map[bomb.x][bomb.y + i].type !== 'wall' && wallRight !== true) {
                 map[bomb.x][bomb.y + i].explode = true
+                explodesToSend.push({
+                    x: bomb.x,
+                    y: bomb.y + i
+                })
             } else {
                 wallRight = true;
             }
@@ -148,9 +177,17 @@ function generateExplode(bomb) {
         if(!(bomb.y - i < 0)) {
             if(map[bomb.x][bomb.y - i].type !== 'wall' && wallLeft !== true) {
                 map[bomb.x][bomb.y - i].explode = true
+                explodesToSend.push({
+                    x: bomb.x,
+                    y: bomb.y - i
+                })
             } else {
                 wallLeft = true;
             }
         }
     }
+    explodes.push(
+        explodesToSend
+    )
+    _explodes.push(explodes);
 }
