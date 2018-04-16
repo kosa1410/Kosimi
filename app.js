@@ -79,6 +79,7 @@ io.sockets.on('connection', function(socket) {
     })  
 
     socket.on('move', function(data) {
+        _socket = socket
         if(data.directory === 'left') {
             if(!(socket.y - 1 < 0 || map[socket.x][socket.y - 1].type === 'wall' || map[socket.x][socket.y - 1].player)) {
                 map[socket.x][socket.y].player = false;
