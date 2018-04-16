@@ -42,6 +42,8 @@ io.sockets.on('connection', function(socket) {
     socket.id = Math.random();
     socket.x = 10;
     socket.y = 0;
+    socket.bombTime = 35;
+    socket.bombStrength = 1;
     SOCKET_LIST[socket.id] = socket
     console.log("new socket connected")
     console.log('Players online: ' + PLAYERS_ONLINE)
@@ -82,10 +84,23 @@ io.sockets.on('connection', function(socket) {
 
     socket.on('put_bomb', function(data) {
         map[socket.x][socket.y].bomb = true
+        bombs.push({
+            x: socket.x,
+            y: socket.y,
+            timeToExplode: socket.bombTime,
+            owner: socket
+        })
     })
 })
 
 setInterval(function() {
+    for(var i in bombs) {
+        var bomb = bombs[i];
+        bomb.timeToExplode--;
+        if(bomb.timeToExplode <= 0) {
+            map[bomb.x][bomb.y].bomb = false
+        }
+    }
     var pack = {map: map};
     for(var i in SOCKET_LIST) {
         var socket = SOCKET_LIST[i]
