@@ -40,10 +40,25 @@ var map = [
 
 var io = require('socket.io')(serv,{});
 io.sockets.on('connection', function(socket) {
+    if(PLAYERS_ONLINE === 0) {
+        socket.x = 10;
+        socket.y = 0;
+    } else if(PLAYERS_ONLINE === 1) {
+        socket.x = 10;
+        socket.y = 10;
+    } else if(PLAYERS_ONLINE === 2) {
+        socket.x = 0;
+        socket.y = 10;
+    } else if(PLAYERS_ONLINE === 3) {
+        socket.x = 0;
+        socket.y = 0;
+    }
+    socket.start = {
+        x: socket.x,
+        y: socket.y
+    }
     PLAYERS_ONLINE++;
     socket.id = Math.random();
-    socket.x = 10;
-    socket.y = 0;
     socket.bombTime = 35;
     socket.bombStrength = 1;
     socket.bombLimit = 1;
@@ -52,6 +67,9 @@ io.sockets.on('connection', function(socket) {
     _socket = socket;
     console.log("new socket connected")
     console.log('Players online: ' + PLAYERS_ONLINE)
+    map[socket.x][socket.y].player = true;
+    pack = {map: map}
+    socket.emit("newPosition", pack)
 
     socket.on('disconnect', function() {
         delete SOCKET_LIST[socket.id]
@@ -62,25 +80,25 @@ io.sockets.on('connection', function(socket) {
     socket.on('move', function(data) {
         socket = _socket
         if(data.directory === 'left') {
-            if(!(socket.y - 1 < 0 || map[socket.x][socket.y - 1].type === 'wall')) {
+            if(!(socket.y - 1 < 0 || map[socket.x][socket.y - 1].type === 'wall' || map[socket.x][socket.y - 1].player)) {
                 map[socket.x][socket.y].player = false;
                 socket.y -= 1
                 map[socket.x][socket.y].player = true;
             }
         } else if(data.directory === 'right') {
-            if(!(socket.y + 1 > 10 || map[socket.x][socket.y + 1].type === 'wall')) {
+            if(!(socket.y + 1 > 10 || map[socket.x][socket.y + 1].type === 'wall' || map[socket.x][socket.y + 1].player)) {
                 map[socket.x][socket.y].player = false;
                 socket.y += 1
                 map[socket.x][socket.y].player = true;
             }
         } else if(data.directory === 'up') {
-            if(!(socket.x - 1 < 0 || map[socket.x - 1][socket.y].type === 'wall')) {
+            if(!(socket.x - 1 < 0 || map[socket.x - 1][socket.y].type === 'wall' || map[socket.x - 1][socket.y].player)) {
                 map[socket.x][socket.y].player = false;
                 socket.x -= 1
                 map[socket.x][socket.y].player = true
             }
         } else if(data.directory === 'down') {
-            if(!(socket.x + 1 > 10 || map[socket.x + 1][socket.y].type === 'wall')) {
+            if(!(socket.x + 1 > 10 || map[socket.x + 1][socket.y].type === 'wall' || map[socket.x + 1][socket.y].player)) {
                 map[socket.x][socket.y].player = false;
                 socket.x += 1;
                 map[socket.x][socket.y].player = true
@@ -201,9 +219,9 @@ function check_if_user_is_in_explosion_area() {
             for(var j in _explodes[i][1]) {
                 if(socket.x === _explodes[i][1][j].x && socket.y === _explodes[i][1][j].y) {
                     map[socket.x][socket.y].player = false
-                    map[10][0].player = true
-                    SOCKET_LIST[socket_num].x = 10
-                    SOCKET_LIST[socket_num].y = 0
+                    map[socket.start.x][socket.start.y].player = true
+                    SOCKET_LIST[socket_num].x = socket.start.x
+                    SOCKET_LIST[socket_num].y = socket.start.y
                 }
             }
         }
