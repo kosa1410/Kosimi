@@ -9,19 +9,6 @@
         up: false,
         down: false
     }
-    var map = [
-        [{type: 'floor', x: 0, y: 0},   {type: 'floor', x: 50, y: 0},   {type: 'floor', x: 100, y: 0},   {type: 'floor', x: 150, y: 0},   {type: 'floor', x: 200, y: 0},   {type: 'floor', x: 250, y: 0},   {type: 'floor', x: 300, y: 0},   {type: 'floor', x: 350, y: 0},   {type: 'floor', x: 400, y: 0},   {type: 'floor', x: 450, y: 0}, {type: 'floor', x: 500, y: 0}],
-        [{type: 'floor', x: 0, y: 50},  {type: 'wall', x: 50, y: 50},   {type: 'floor', x: 100, y: 50},  {type: 'wall', x: 150, y: 50},   {type: 'floor', x: 200, y: 50},  {type: 'wall', x: 250, y: 50},   {type: 'floor', x: 300, y: 50},  {type: 'wall', x: 350, y: 50},   {type: 'floor', x: 400, y: 50},  {type: 'wall', x: 450, y: 50}, {type: 'floor', x: 500, y: 50}],
-        [{type: 'floor', x: 0, y: 100}, {type: 'floor', x: 50, y: 100}, {type: 'floor', x: 100, y: 100}, {type: 'floor', x: 150, y: 100}, {type: 'floor', x: 200, y: 100}, {type: 'floor', x: 250, y: 100}, {type: 'floor', x: 300, y: 100}, {type: 'floor', x: 350, y: 100}, {type: 'floor', x: 400, y: 100}, {type: 'floor', x: 450, y: 100}, {type: 'floor', x: 500, y: 100}],
-        [{type: 'floor', x: 0, y: 150}, {type: 'wall', x: 50, y: 150},  {type: 'floor', x: 100, y: 150}, {type: 'wall', x: 150, y: 150},  {type: 'floor', x: 200, y: 150}, {type: 'wall', x: 250, y: 150},  {type: 'floor', x: 300, y: 150}, {type: 'wall', x: 350, y: 150},  {type: 'floor', x: 400, y: 150}, {type: 'wall', x: 450, y: 150}, {type: 'floor', x: 500, y: 150}],
-        [{type: 'floor', x: 0, y: 200}, {type: 'floor', x: 50, y: 200}, {type: 'floor', x: 100, y: 200}, {type: 'floor', x: 150, y: 200}, {type: 'floor', x: 200, y: 200}, {type: 'floor', x: 250, y: 200}, {type: 'floor', x: 300, y: 200}, {type: 'floor', x: 350, y: 200}, {type: 'floor', x: 400, y: 200}, {type: 'floor', x: 450, y: 200}, {type: 'floor', x: 500, y: 200}],
-        [{type: 'floor', x: 0, y: 250}, {type: 'wall', x: 50, y: 250},  {type: 'floor', x: 100, y: 250}, {type: 'wall', x: 150, y: 250},  {type: 'floor', x: 200, y: 250}, {type: 'wall', x: 250, y: 250},  {type: 'floor', x: 300, y: 250}, {type: 'wall', x: 350, y: 250},  {type: 'floor', x: 400, y: 250}, {type: 'wall', x: 450, y: 250}, {type: 'floor', x: 500, y: 250}],
-        [{type: 'floor', x: 0, y: 300}, {type: 'floor', x: 50, y: 300}, {type: 'floor', x: 100, y: 300}, {type: 'floor', x: 150, y: 300}, {type: 'floor', x: 200, y: 300}, {type: 'floor', x: 250, y: 300}, {type: 'floor', x: 300, y: 300}, {type: 'floor', x: 350, y: 300}, {type: 'floor', x: 400, y: 300}, {type: 'floor', x: 450, y: 300}, {type: 'floor', x: 500, y: 300}],
-        [{type: 'floor', x: 0, y: 350}, {type: 'wall', x: 50, y: 350},  {type: 'floor', x: 100, y: 350}, {type: 'wall', x: 150, y: 350},  {type: 'floor', x: 200, y: 350}, {type: 'wall', x: 250, y: 350},  {type: 'floor', x: 300, y: 350}, {type: 'wall', x: 350, y: 350},  {type: 'floor', x: 400, y: 350}, {type: 'wall', x: 450, y: 350}, {type: 'floor', x: 500, y: 350}],
-        [{type: 'floor', x: 0, y: 400}, {type: 'floor', x: 50, y: 400}, {type: 'floor', x: 100, y: 400}, {type: 'floor', x: 150, y: 400}, {type: 'floor', x: 200, y: 400}, {type: 'floor', x: 250, y: 400}, {type: 'floor', x: 300, y: 400}, {type: 'floor', x: 350, y: 400}, {type: 'floor', x: 400, y: 400}, {type: 'floor', x: 450, y: 400}, {type: 'floor', x: 500, y: 400}],
-        [{type: 'floor', x: 0, y: 450}, {type: 'wall', x: 50, y: 450},  {type: 'floor', x: 100, y: 450}, {type: 'wall', x: 150, y: 450},  {type: 'floor', x: 200, y: 450}, {type: 'wall', x: 250, y: 450},  {type: 'floor', x: 300, y: 450}, {type: 'wall', x: 350, y: 450},  {type: 'floor', x: 400, y: 450}, {type: 'wall', x: 450, y: 450}, {type: 'floor', x: 500, y: 450}],
-        [{type: 'floor', x: 0, y: 500}, {type: 'floor', x: 50, y: 500}, {type: 'floor', x: 100, y: 500}, {type: 'floor', x: 150, y: 500}, {type: 'floor', x: 200, y: 500}, {type: 'floor', x: 250, y: 500}, {type: 'floor', x: 300, y: 500}, {type: 'floor', x: 350, y: 500}, {type: 'floor', x: 400, y: 500}, {type: 'floor', x: 450, y: 500}, {type: 'floor', x: 500, y: 500}],
-    ]
 
     var bombImg = new Image()
     bombImg.src = 'client/images/bomb.png';
@@ -38,38 +25,43 @@
     var socket = io();
     socket.on('newPosition', function(data) {
         ctx.clearRect(0,0,canvas.height, canvas.width);
-        for(var i=0; i<map.length; i++) {
-            for(var j=0; j<map[i].length; j++) {
-                ctx.drawImage(map[i][j].type == 'wall' ? wallImg : floorImg, map[i][j].x, map[i][j].y, 50, 50);
+        for(var i=0; i<data.map.length; i++) {
+            for(var j=0; j<data.map[i].length; j++) {
+                ctx.drawImage(data.map[i][j].type == 'wall' ? wallImg : floorImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
+                if(data.map[i][j].bomb) {
+                    ctx.drawImage(bombImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
+                }
+                if(data.map[i][j].player) {
+                    ctx.drawImage(heroImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
+                }
             }
         }
-        for(var i=0; i<data.length; i++) {
-            ctx.drawImage(heroImg, map[data[i].x][data[i].y].x, map[data[i].x][data[i].y].y, 50, 50);
+        for(var i=0; i<data.map.length; i++) {
         }
     })
 
     document.addEventListener('keydown', function(e) {
         if(e.keyCode === 37) {
             if(speed_update.left === false) {
-                socket.emit('move', {'directory': 'left', map: map})
+                socket.emit('move', {'directory': 'left'})
                 speed_update.left = true
                 setTimeout(function() { speed_update.left = false }, 100)
             }
         } else if(e.keyCode === 39) {
             if(speed_update.right === false) {
-                socket.emit('move', {'directory': 'right', map: map})
+                socket.emit('move', {'directory': 'right'})
                 speed_update.right = true
                 setTimeout(function() { speed_update.right = false }, 100)
             }
         } else if(e.keyCode === 38) {
             if(speed_update.up === false) {
-                socket.emit('move', {'directory': 'up', map: map})
+                socket.emit('move', {'directory': 'up'})
                 speed_update.up = true
                 setTimeout(function() { speed_update.up = false }, 100)
             }
         } else if(e.keyCode === 40) {
             if(speed_update.down === false) {
-                socket.emit('move', {'directory': 'down', map: map})
+                socket.emit('move', {'directory': 'down'})
                 speed_update.down = true
                 setTimeout(function() { speed_update.down = false }, 100)
             }
