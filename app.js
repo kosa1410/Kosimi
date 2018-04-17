@@ -25,17 +25,17 @@ var _socket = {}
 var _explodes = [];
 
 var map = [
-    [{type: 'floor', x: 0, y: 0},   {type: 'floor', x: 50, y: 0},   {type: 'floor', x: 100, y: 0},   {type: 'floor', x: 150, y: 0},   {type: 'floor', x: 200, y: 0},   {type: 'floor', x: 250, y: 0},   {type: 'floor', x: 300, y: 0},   {type: 'floor', x: 350, y: 0},   {type: 'floor', x: 400, y: 0},   {type: 'floor', x: 450, y: 0}, {type: 'floor', x: 500, y: 0}],
-    [{type: 'floor', x: 0, y: 50},  {type: 'wall', x: 50, y: 50},   {type: 'floor', x: 100, y: 50},  {type: 'wall', x: 150, y: 50},   {type: 'floor', x: 200, y: 50},  {type: 'wall', x: 250, y: 50},   {type: 'floor', x: 300, y: 50},  {type: 'wall', x: 350, y: 50},   {type: 'floor', x: 400, y: 50},  {type: 'wall', x: 450, y: 50}, {type: 'floor', x: 500, y: 50}],
-    [{type: 'floor', x: 0, y: 100}, {type: 'floor', x: 50, y: 100}, {type: 'floor', x: 100, y: 100}, {type: 'floor', x: 150, y: 100}, {type: 'floor', x: 200, y: 100}, {type: 'floor', x: 250, y: 100}, {type: 'floor', x: 300, y: 100}, {type: 'floor', x: 350, y: 100}, {type: 'floor', x: 400, y: 100}, {type: 'floor', x: 450, y: 100}, {type: 'floor', x: 500, y: 100}],
-    [{type: 'floor', x: 0, y: 150}, {type: 'wall', x: 50, y: 150},  {type: 'floor', x: 100, y: 150}, {type: 'wall', x: 150, y: 150},  {type: 'floor', x: 200, y: 150}, {type: 'wall', x: 250, y: 150},  {type: 'floor', x: 300, y: 150}, {type: 'wall', x: 350, y: 150},  {type: 'floor', x: 400, y: 150}, {type: 'wall', x: 450, y: 150}, {type: 'floor', x: 500, y: 150}],
-    [{type: 'floor', x: 0, y: 200}, {type: 'floor', x: 50, y: 200}, {type: 'floor', x: 100, y: 200}, {type: 'floor', x: 150, y: 200}, {type: 'floor', x: 200, y: 200}, {type: 'floor', x: 250, y: 200}, {type: 'floor', x: 300, y: 200}, {type: 'floor', x: 350, y: 200}, {type: 'floor', x: 400, y: 200}, {type: 'floor', x: 450, y: 200}, {type: 'floor', x: 500, y: 200}],
-    [{type: 'floor', x: 0, y: 250}, {type: 'wall', x: 50, y: 250},  {type: 'floor', x: 100, y: 250}, {type: 'wall', x: 150, y: 250},  {type: 'floor', x: 200, y: 250}, {type: 'wall', x: 250, y: 250},  {type: 'floor', x: 300, y: 250}, {type: 'wall', x: 350, y: 250},  {type: 'floor', x: 400, y: 250}, {type: 'wall', x: 450, y: 250}, {type: 'floor', x: 500, y: 250}],
-    [{type: 'floor', x: 0, y: 300}, {type: 'floor', x: 50, y: 300}, {type: 'floor', x: 100, y: 300}, {type: 'floor', x: 150, y: 300}, {type: 'floor', x: 200, y: 300}, {type: 'floor', x: 250, y: 300}, {type: 'floor', x: 300, y: 300}, {type: 'floor', x: 350, y: 300}, {type: 'floor', x: 400, y: 300}, {type: 'floor', x: 450, y: 300}, {type: 'floor', x: 500, y: 300}],
-    [{type: 'floor', x: 0, y: 350}, {type: 'wall', x: 50, y: 350},  {type: 'floor', x: 100, y: 350}, {type: 'wall', x: 150, y: 350},  {type: 'floor', x: 200, y: 350}, {type: 'wall', x: 250, y: 350},  {type: 'floor', x: 300, y: 350}, {type: 'wall', x: 350, y: 350},  {type: 'floor', x: 400, y: 350}, {type: 'wall', x: 450, y: 350}, {type: 'floor', x: 500, y: 350}],
-    [{type: 'floor', x: 0, y: 400}, {type: 'floor', x: 50, y: 400}, {type: 'floor', x: 100, y: 400}, {type: 'floor', x: 150, y: 400}, {type: 'floor', x: 200, y: 400}, {type: 'floor', x: 250, y: 400}, {type: 'floor', x: 300, y: 400}, {type: 'floor', x: 350, y: 400}, {type: 'floor', x: 400, y: 400}, {type: 'floor', x: 450, y: 400}, {type: 'floor', x: 500, y: 400}],
-    [{type: 'floor', x: 0, y: 450}, {type: 'wall', x: 50, y: 450},  {type: 'floor', x: 100, y: 450}, {type: 'wall', x: 150, y: 450},  {type: 'floor', x: 200, y: 450}, {type: 'wall', x: 250, y: 450},  {type: 'floor', x: 300, y: 450}, {type: 'wall', x: 350, y: 450},  {type: 'floor', x: 400, y: 450}, {type: 'wall', x: 450, y: 450}, {type: 'floor', x: 500, y: 450}],
-    [{type: 'floor', x: 0, y: 500, player: true}, {type: 'floor', x: 50, y: 500}, {type: 'floor', x: 100, y: 500}, {type: 'floor', x: 150, y: 500}, {type: 'floor', x: 200, y: 500}, {type: 'floor', x: 250, y: 500}, {type: 'floor', x: 300, y: 500}, {type: 'floor', x: 350, y: 500}, {type: 'floor', x: 400, y: 500}, {type: 'floor', x: 450, y: 500}, {type: 'floor', x: 500, y: 500}],
+    [{type: 'floor', x: 0, y: 0},   {type: 'floor', x: 50, y: 0},   {type: 'wallTD', x: 100, y: 0},   {type: 'wallTD', x: 150, y: 0},   {type: 'wallTD', x: 200, y: 0},   {type: 'wallTD', x: 250, y: 0},   {type: 'wallTD', x: 300, y: 0},   {type: 'wallTD', x: 350, y: 0},   {type: 'wallTD', x: 400, y: 0},   {type: 'floor', x: 450, y: 0}, {type: 'floor', x: 500, y: 0}],
+    [{type: 'floor', x: 0, y: 50},  {type: 'wall', x: 50, y: 50},   {type: 'wallTD', x: 100, y: 50},  {type: 'wall', x: 150, y: 50},   {type: 'wallTD', x: 200, y: 50},  {type: 'wall', x: 250, y: 50},   {type: 'wallTD', x: 300, y: 50},  {type: 'wall', x: 350, y: 50},   {type: 'wallTD', x: 400, y: 50},  {type: 'wall', x: 450, y: 50}, {type: 'floor', x: 500, y: 50}],
+    [{type: 'wallTD', x: 0, y: 100}, {type: 'wallTD', x: 50, y: 100}, {type: 'floor', x: 100, y: 100}, {type: 'wallTD', x: 150, y: 100}, {type: 'wallTD', x: 200, y: 100}, {type: 'wallTD', x: 250, y: 100}, {type: 'wallTD', x: 300, y: 100}, {type: 'wallTD', x: 350, y: 100}, {type: 'floor', x: 400, y: 100}, {type: 'wallTD', x: 450, y: 100}, {type: 'wallTD', x: 500, y: 100}],
+    [{type: 'wallTD', x: 0, y: 150}, {type: 'wall', x: 50, y: 150},  {type: 'wallTD', x: 100, y: 150}, {type: 'wall', x: 150, y: 150},  {type: 'wallTD', x: 200, y: 150}, {type: 'wall', x: 250, y: 150},  {type: 'wallTD', x: 300, y: 150}, {type: 'wall', x: 350, y: 150},  {type: 'wallTD', x: 400, y: 150}, {type: 'wall', x: 450, y: 150}, {type: 'wallTD', x: 500, y: 150}],
+    [{type: 'wallTD', x: 0, y: 200}, {type: 'wallTD', x: 50, y: 200}, {type: 'wallTD', x: 100, y: 200}, {type: 'wallTD', x: 150, y: 200}, {type: 'wallTD', x: 200, y: 200}, {type: 'wallTD', x: 250, y: 200}, {type: 'wallTD', x: 300, y: 200}, {type: 'wallTD', x: 350, y: 200}, {type: 'wallTD', x: 400, y: 200}, {type: 'wallTD', x: 450, y: 200}, {type: 'wallTD', x: 500, y: 200}],
+    [{type: 'wallTD', x: 0, y: 250}, {type: 'wall', x: 50, y: 250},  {type: 'wallTD', x: 100, y: 250}, {type: 'wall', x: 150, y: 250},  {type: 'wallTD', x: 200, y: 250}, {type: 'wall', x: 250, y: 250},  {type: 'wallTD', x: 300, y: 250}, {type: 'wall', x: 350, y: 250},  {type: 'wallTD', x: 400, y: 250}, {type: 'wall', x: 450, y: 250}, {type: 'wallTD', x: 500, y: 250}],
+    [{type: 'wallTD', x: 0, y: 300}, {type: 'wallTD', x: 50, y: 300}, {type: 'wallTD', x: 100, y: 300}, {type: 'wallTD', x: 150, y: 300}, {type: 'wallTD', x: 200, y: 300}, {type: 'wallTD', x: 250, y: 300}, {type: 'wallTD', x: 300, y: 300}, {type: 'wallTD', x: 350, y: 300}, {type: 'wallTD', x: 400, y: 300}, {type: 'wallTD', x: 450, y: 300}, {type: 'wallTD', x: 500, y: 300}],
+    [{type: 'wallTD', x: 0, y: 350}, {type: 'wall', x: 50, y: 350},  {type: 'wallTD', x: 100, y: 350}, {type: 'wall', x: 150, y: 350},  {type: 'wallTD', x: 200, y: 350}, {type: 'wall', x: 250, y: 350},  {type: 'wallTD', x: 300, y: 350}, {type: 'wall', x: 350, y: 350},  {type: 'wallTD', x: 400, y: 350}, {type: 'wall', x: 450, y: 350}, {type: 'wallTD', x: 500, y: 350}],
+    [{type: 'wallTD', x: 0, y: 400}, {type: 'wallTD', x: 50, y: 400}, {type: 'floor', x: 100, y: 400}, {type: 'wallTD', x: 150, y: 400}, {type: 'wallTD', x: 200, y: 400}, {type: 'wallTD', x: 250, y: 400}, {type: 'wallTD', x: 300, y: 400}, {type: 'wallTD', x: 350, y: 400}, {type: 'floor', x: 400, y: 400}, {type: 'wallTD', x: 450, y: 400}, {type: 'wallTD', x: 500, y: 400}],
+    [{type: 'floor', x: 0, y: 450}, {type: 'wall', x: 50, y: 450},  {type: 'wallTD', x: 100, y: 450}, {type: 'wall', x: 150, y: 450},  {type: 'wallTD', x: 200, y: 450}, {type: 'wall', x: 250, y: 450},  {type: 'wallTD', x: 300, y: 450}, {type: 'wall', x: 350, y: 450},  {type: 'wallTD', x: 400, y: 450}, {type: 'wall', x: 450, y: 450}, {type: 'floor', x: 500, y: 450}],
+    [{type: 'floor', x: 0, y: 500, player: true}, {type: 'floor', x: 50, y: 500}, {type: 'wallTD', x: 100, y: 500}, {type: 'wallTD', x: 150, y: 500}, {type: 'wallTD', x: 200, y: 500}, {type: 'wallTD', x: 250, y: 500}, {type: 'wallTD', x: 300, y: 500}, {type: 'wallTD', x: 350, y: 500}, {type: 'wallTD', x: 400, y: 500}, {type: 'floor', x: 450, y: 500}, {type: 'floor', x: 500, y: 500}],
 ]
 
 var io = require('socket.io')(serv,{});
@@ -60,7 +60,7 @@ io.sockets.on('connection', function(socket) {
     PLAYERS_ONLINE++;
     socket.id = Math.random();
     socket.bombTime = 35;
-    socket.bombStrength = 1;
+    socket.bombStrength = 2;
     socket.bombLimit = 1;
     socket.bombsUp = 0;
     SOCKET_LIST[socket.id] = socket
@@ -81,25 +81,25 @@ io.sockets.on('connection', function(socket) {
     socket.on('move', function(data) {
         _socket = socket
         if(data.directory === 'left') {
-            if(!(socket.y - 1 < 0 || map[socket.x][socket.y - 1].type === 'wall' || map[socket.x][socket.y - 1].player)) {
+            if(!(socket.y - 1 < 0 || map[socket.x][socket.y - 1].type === 'wall' || socket.y - 1 < 0 || map[socket.x][socket.y - 1].type === 'wallTD' || map[socket.x][socket.y - 1].player)) {
                 map[socket.x][socket.y].player = false;
                 socket.y -= 1
                 map[socket.x][socket.y].player = true;
             }
         } else if(data.directory === 'right') {
-            if(!(socket.y + 1 > 10 || map[socket.x][socket.y + 1].type === 'wall' || map[socket.x][socket.y + 1].player)) {
+            if(!(socket.y + 1 > 10 || map[socket.x][socket.y + 1].type === 'wall' || socket.y + 1 > 10 || map[socket.x][socket.y + 1].type === 'wallTD' || map[socket.x][socket.y + 1].player)) {
                 map[socket.x][socket.y].player = false;
                 socket.y += 1
                 map[socket.x][socket.y].player = true;
             }
         } else if(data.directory === 'up') {
-            if(!(socket.x - 1 < 0 || map[socket.x - 1][socket.y].type === 'wall' || map[socket.x - 1][socket.y].player)) {
+            if(!(socket.x - 1 < 0 || map[socket.x - 1][socket.y].type === 'wall' || socket.x - 1 < 0 || map[socket.x - 1][socket.y].type === 'wallTD' || map[socket.x - 1][socket.y].player)) {
                 map[socket.x][socket.y].player = false;
                 socket.x -= 1
                 map[socket.x][socket.y].player = true
             }
         } else if(data.directory === 'down') {
-            if(!(socket.x + 1 > 10 || map[socket.x + 1][socket.y].type === 'wall' || map[socket.x + 1][socket.y].player)) {
+            if(!(socket.x + 1 > 10 || map[socket.x + 1][socket.y].type === 'wall' || socket.x + 1 > 10 || map[socket.x + 1][socket.y].type === 'wallTD' || map[socket.x + 1][socket.y].player)) {
                 map[socket.x][socket.y].player = false;
                 socket.x += 1;
                 map[socket.x][socket.y].player = true
@@ -161,47 +161,75 @@ function generateExplode(bomb) {
     })
     for(var i=0; i<bomb.owner.bombStrength+1; i++) {
         if(!(bomb.x - i < 0)) {
-            if(map[bomb.x - i][bomb.y].type !== 'wall' && wallUp !== true) {
+            if(map[bomb.x - i][bomb.y].type === 'wall' || wallUp === true) {
+                wallUp = true;
+            } else if(map[bomb.x - i][bomb.y].type === 'wallTD' && wallUp !== true) {
                 map[bomb.x - i][bomb.y].explode = true
                 explodesToSend.push({
                     x: bomb.x - i,
                     y: bomb.y
                 })
+                wallUp = true        
             } else {
-                wallUp = true;
+                map[bomb.x - i][bomb.y].explode = true
+                explodesToSend.push({
+                    x: bomb.x - i,
+                    y: bomb.y
+                })
             }
         }
         if(!(bomb.x + i > 10)) {
-            if(map[bomb.x + i][bomb.y].type !== 'wall' && wallDown !== true) {
+            if(map[bomb.x + i][bomb.y].type === 'wall' || wallDown === true) {
+                wallDown = true;
+            } else if(map[bomb.x + i][bomb.y].type === 'wallTD' && wallDown !== true) {
                 map[bomb.x + i][bomb.y].explode = true
                 explodesToSend.push({
                     x: bomb.x + i,
                     y: bomb.y
                 })
-            } else {
                 wallDown = true;
+            } else {
+                map[bomb.x + i][bomb.y].explode = true
+                explodesToSend.push({
+                    x: bomb.x + i,
+                    y: bomb.y
+                })
             }
         }
         if(!(bomb.y + i > 10)) {
-            if(map[bomb.x][bomb.y + i].type !== 'wall' && wallRight !== true) {
+            if(map[bomb.x][bomb.y + i].type === 'wall' || wallRight === true) {
+                wallRight = true;
+            } else if(map[bomb.x][bomb.y + i].type === 'wallTD' && wallRight !== true) {
                 map[bomb.x][bomb.y + i].explode = true
                 explodesToSend.push({
                     x: bomb.x,
                     y: bomb.y + i
                 })
-            } else {
                 wallRight = true;
+            } else {
+                map[bomb.x][bomb.y + i].explode = true
+                explodesToSend.push({
+                    x: bomb.x,
+                    y: bomb.y + i
+                })
             }
         }
         if(!(bomb.y - i < 0)) {
-            if(map[bomb.x][bomb.y - i].type !== 'wall' && wallLeft !== true) {
+            if(map[bomb.x][bomb.y - i].type === 'wall' || wallLeft === true) {
+                wallLeft = true;
+            } else if(map[bomb.x][bomb.y - i].type === 'wallTD' && wallLeft !== true) {
                 map[bomb.x][bomb.y - i].explode = true
                 explodesToSend.push({
                     x: bomb.x,
                     y: bomb.y - i
                 })
+                wallLeft = true;        
             } else {
-                wallLeft = true;
+                map[bomb.x][bomb.y - i].explode = true
+                explodesToSend.push({
+                    x: bomb.x,
+                    y: bomb.y - i
+                })
             }
         }
     }
@@ -211,6 +239,7 @@ function generateExplode(bomb) {
     _explodes.push(explodes);
 
     check_if_user_is_in_explosion_area();
+    check_if_wallTD_is_in_explosion_area();
 }
 
 function check_if_user_is_in_explosion_area() {
@@ -225,6 +254,14 @@ function check_if_user_is_in_explosion_area() {
                     SOCKET_LIST[socket_num].y = socket.start.y
                 }
             }
+        }
+    }
+}
+
+function check_if_wallTD_is_in_explosion_area() {
+    for(var i in _explodes) {
+        for(var j in _explodes[i][1]) {
+            
         }
     }
 }
