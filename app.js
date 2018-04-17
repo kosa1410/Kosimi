@@ -105,6 +105,7 @@ io.sockets.on('connection', function(socket) {
                 map[socket.x][socket.y].player = true
             }
         }
+        check_if_user_is_on_field_with_boost();
     })
 
     socket.on('put_bomb', function(data) {
@@ -268,5 +269,17 @@ function check_if_wallTD_is_in_explosion_area() {
                 map[_explodes[i][1][j].x][_explodes[i][1][j].y].type = 'floor';
             }
         }
+    }
+}
+
+function check_if_user_is_on_field_with_boost() {
+    if(map[_socket.x][_socket.y].bombBoost) {
+        map[_socket.x][_socket.y].bombBoost = false;
+        _socket.bombLimit++;
+        SOCKET_LIST[_socket.id] = _socket
+    } else if(map[_socket.x][_socket.y].strengthBoost) {
+        map[_socket.x][_socket.y].strengthBoost = false;
+        _socket.bombStrength++;
+        SOCKET_LIST[_socket.id] = _socket
     }
 }
