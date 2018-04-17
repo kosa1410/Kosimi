@@ -287,6 +287,13 @@ function check_if_wallTD_is_in_explosion_area() {
         for(var j in _explodes[i][1]) {
             if(map[_explodes[i][1][j].x][_explodes[i][1][j].y].type === 'wallTD') {
                 map[_explodes[i][1][j].x][_explodes[i][1][j].y].type = 'floor';
+                random = Math.floor((Math.random() * 100) + 1); // Generate random number to know if there should be boost or not
+                                                                // 1-15 - bombBoost, 16-30 - strengthBoost
+                if(random >= 1 && random <= 15) {
+                    map[_explodes[i][1][j].x][_explodes[i][1][j].y].bombBoost = true;
+                } else if(random >= 16 && random <= 30) {
+                    map[_explodes[i][1][j].x][_explodes[i][1][j].y].strengthBoost = true;
+                }
             }
         }
     }
