@@ -27,6 +27,12 @@
 
     var wallTDImg = new Image()
     wallTDImg.src = 'client/images/wood.png';
+
+    var bombBoostImg = new Image()
+    bombBoostImg.src = 'client/images/bombBoost.png';
+
+    var strengthBoostImg = new Image()
+    strengthBoostImg.src = 'client/images/strengthBoost.png';
     
     var socket = io();
     socket.on('newPosition', function(data) {
@@ -44,6 +50,12 @@
                 ctx.drawImage(toDraw, data.map[i][j].x, data.map[i][j].y, 50, 50);
                 if(data.map[i][j].bomb) {
                     ctx.drawImage(bombImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
+                }
+                if(data.map[i][j].bombBoost) {
+                    ctx.drawImage(bombBoostImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
+                }
+                if(data.map[i][j].strengthBoost) {
+                    ctx.drawImage(strengthBoostImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
                 }
                 if(data.map[i][j].player) {
                     ctx.drawImage(heroImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
