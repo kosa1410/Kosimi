@@ -81,28 +81,48 @@ io.sockets.on('connection', function(socket) {
     socket.on('move', function(data) {
         _socket = socket
         if(data.directory === 'left') {
-            if(!(socket.y - 1 < 0 || map[socket.x][socket.y - 1].type === 'wall' || socket.y - 1 < 0 || map[socket.x][socket.y - 1].type === 'wallTD' || map[socket.x][socket.y - 1].player)) {
-                map[socket.x][socket.y].player = false;
-                socket.y -= 1
-                map[socket.x][socket.y].player = true;
+            if(!(socket.y - 1 < 0 || 
+                map[socket.x][socket.y - 1].type === 'wall' || 
+                socket.y - 1 < 0 || 
+                map[socket.x][socket.y - 1].type === 'wallTD' || 
+                map[socket.x][socket.y - 1].player || 
+                map[socket.x][socket.y - 1].bomb)) {
+                    map[socket.x][socket.y].player = false;
+                    socket.y -= 1
+                    map[socket.x][socket.y].player = true;
             }
         } else if(data.directory === 'right') {
-            if(!(socket.y + 1 > 10 || map[socket.x][socket.y + 1].type === 'wall' || socket.y + 1 > 10 || map[socket.x][socket.y + 1].type === 'wallTD' || map[socket.x][socket.y + 1].player)) {
-                map[socket.x][socket.y].player = false;
-                socket.y += 1
-                map[socket.x][socket.y].player = true;
+            if(!(socket.y + 1 > 10 || 
+                map[socket.x][socket.y + 1].type === 'wall' || 
+                socket.y + 1 > 10 || 
+                map[socket.x][socket.y + 1].type === 'wallTD' || 
+                map[socket.x][socket.y + 1].player || 
+                map[socket.x][socket.y + 1].bomb)) {
+                    map[socket.x][socket.y].player = false;
+                    socket.y += 1
+                    map[socket.x][socket.y].player = true;
             }
         } else if(data.directory === 'up') {
-            if(!(socket.x - 1 < 0 || map[socket.x - 1][socket.y].type === 'wall' || socket.x - 1 < 0 || map[socket.x - 1][socket.y].type === 'wallTD' || map[socket.x - 1][socket.y].player)) {
-                map[socket.x][socket.y].player = false;
-                socket.x -= 1
-                map[socket.x][socket.y].player = true
+            if(!(socket.x - 1 < 0 || 
+                map[socket.x - 1][socket.y].type === 'wall' || 
+                socket.x - 1 < 0 || 
+                map[socket.x - 1][socket.y].type === 'wallTD' || 
+                map[socket.x - 1][socket.y].player || 
+                map[socket.x - 1][socket.y].bomb)) {
+                    map[socket.x][socket.y].player = false;
+                    socket.x -= 1
+                    map[socket.x][socket.y].player = true
             }
         } else if(data.directory === 'down') {
-            if(!(socket.x + 1 > 10 || map[socket.x + 1][socket.y].type === 'wall' || socket.x + 1 > 10 || map[socket.x + 1][socket.y].type === 'wallTD' || map[socket.x + 1][socket.y].player)) {
-                map[socket.x][socket.y].player = false;
-                socket.x += 1;
-                map[socket.x][socket.y].player = true
+            if(!(socket.x + 1 > 10 || 
+                map[socket.x + 1][socket.y].type === 'wall' || 
+                socket.x + 1 > 10 || 
+                map[socket.x + 1][socket.y].type === 'wallTD' || 
+                map[socket.x + 1][socket.y].player || 
+                map[socket.x + 1][socket.y].bomb)) {
+                    map[socket.x][socket.y].player = false;
+                    socket.x += 1;
+                    map[socket.x][socket.y].player = true
             }
         }
         check_if_user_is_on_field_with_boost();
