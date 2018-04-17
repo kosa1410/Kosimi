@@ -69,6 +69,10 @@
         }
     })
 
+    socket.on('finish', function() {
+        window.location = '/'
+    })
+
     document.addEventListener('keydown', function(e) {
         if(e.keyCode === 37) {
             if(speed_update.left === false) {
