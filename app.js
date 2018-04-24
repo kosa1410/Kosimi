@@ -163,9 +163,9 @@ function generate_events(socket) {
                     map[socket.x][socket.y].player = socket.player;
             }
         } else if(data.directory === 'right') {
-            if(!(socket.y + 1 > sizeX || 
+            if(!(socket.y + 1 > sizeX-1 || 
                 map[socket.x][socket.y + 1].type === 'wall' || 
-                socket.y + 1 > sizeX || 
+                socket.y + 1 > sizeX-1 || 
                 map[socket.x][socket.y + 1].type === 'wallTD' || 
                 map[socket.x][socket.y + 1].player || 
                 map[socket.x][socket.y + 1].bomb)) {
@@ -185,9 +185,9 @@ function generate_events(socket) {
                     map[socket.x][socket.y].player = socket.player;
             }
         } else if(data.directory === 'down') {
-            if(!(socket.x + 1 > sizeX || 
+            if(!(socket.x + 1 > sizeX-1 || 
                 map[socket.x + 1][socket.y].type === 'wall' || 
-                socket.x + 1 > sizeX || 
+                socket.x + 1 > sizeX-1 || 
                 map[socket.x + 1][socket.y].type === 'wallTD' || 
                 map[socket.x + 1][socket.y].player || 
                 map[socket.x + 1][socket.y].bomb)) {
