@@ -1,7 +1,12 @@
+
 <canvas id="ctx" width="550" height="550" style="border:1px solid #000000;"></canvas>
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script>
-    var canvas = document.getElementById("ctx")
+
+var canvas = document.getElementById("ctx")
+
+    canvas.width = document.URL.substring(document.URL.search(/game/i)+4,document.URL.search(/game/i)+6)*50;
+    canvas.height = document.URL.substring(document.URL.search(/game/i)+4,document.URL.search(/game/i)+6)*50;
     var ctx = canvas.getContext("2d");
     var speed_update = {
         left: false,
