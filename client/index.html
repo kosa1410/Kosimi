@@ -13,8 +13,17 @@
     var bombImg = new Image()
     bombImg.src = 'client/images/bomb.png';
 
-    var heroImg = new Image()
-    heroImg.src = 'client/images/x.png';
+    var hero1Img = new Image()
+    hero1Img.src = 'client/images/player1.png';
+
+    var hero2Img = new Image()
+    hero2Img.src = 'client/images/player2.png';
+    
+    var hero3Img = new Image()
+    hero3Img.src = 'client/images/player3.png';
+    
+    var hero4Img = new Image()
+    hero4Img.src = 'client/images/player4.png';
 
     var wallImg = new Image()
     wallImg.src = 'client/images/wall.png';
@@ -57,8 +66,17 @@
                 if(data.map[i][j].strengthBoost) {
                     ctx.drawImage(strengthBoostImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
                 }
-                if(data.map[i][j].player) {
-                    ctx.drawImage(heroImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
+                if(data.map[i][j].player === 'player1') {
+                    ctx.drawImage(hero1Img, data.map[i][j].x, data.map[i][j].y, 50, 50);
+                }
+                if(data.map[i][j].player === 'player2') {
+                    ctx.drawImage(hero2Img, data.map[i][j].x, data.map[i][j].y, 50, 50);
+                }
+                if(data.map[i][j].player === 'player3') {
+                    ctx.drawImage(hero3Img, data.map[i][j].x, data.map[i][j].y, 50, 50);
+                }
+                if(data.map[i][j].player === 'player4') {
+                    ctx.drawImage(hero4Img, data.map[i][j].x, data.map[i][j].y, 50, 50);
                 }
                 if(data.map[i][j].explode) {
                     ctx.drawImage(explodeImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
@@ -76,6 +94,7 @@
     document.addEventListener('keydown', function(e) {
         if(e.keyCode === 37) {
             if(speed_update.left === false) {
+                console.log('x')
                 socket.emit('move', {'directory': 'left'})
                 speed_update.left = true
                 setTimeout(function() { speed_update.left = false }, 100)
