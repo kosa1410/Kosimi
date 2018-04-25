@@ -369,7 +369,13 @@ function check_if_user_is_in_explosion_area() {
                 if(socket.x === _explodes[i][1][j].x && socket.y === _explodes[i][1][j].y) {
                     PLAYERS_ALIVE--;
                     map[socket.x][socket.y].player = false
+                    socket.x = -50
+                    socket.y = -50
                     SOCKET_LIST[socket_num].dead = true;
+                }
+            }
+        }
+    }
                     if(PLAYERS_ONLINE > 1) {
                         if(PLAYERS_ALIVE <= 1) {
                             reset_map()
@@ -380,15 +386,13 @@ function check_if_user_is_in_explosion_area() {
                         }
                     }
                 }
-            }
-        }
-    }
-}
+     
 
 function reset_map() {
-    _explodes = [];
-    buildMap();
+    stopInterval();
     PLAYERS_ALIVE = 0;
+    buildMap();
+    _explodes = []
     for(var i in SOCKET_LIST) {
         // PLAYERS_ONLINE--
         // SOCKET_LIST[i].emit('finish')
