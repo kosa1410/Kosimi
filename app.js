@@ -381,8 +381,8 @@ function check_if_user_is_in_explosion_area() {
 function reset_map() {
     stopInterval();
     PLAYERS_ALIVE = 0;
-    buildMap(PLAYERS_ALIVE);
     _explodes = []
+    buildMap(PLAYERS_ALIVE);
     for(var i in SOCKET_LIST) {
         // PLAYERS_ONLINE--
         // SOCKET_LIST[i].emit('finish')
