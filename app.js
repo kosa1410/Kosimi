@@ -111,8 +111,11 @@ io.sockets.on('connection', function(socket) {
     socket.bombsUp = 0;
     SOCKET_LIST[socket.id] = socket
     _socket = socket;
+    for(var i in SOCKET_LIST) {
+        var socket = SOCKET_LIST[i]
+        socket.emit('updatePlayers', {players: PLAYERS_ONLINE})
+    }
     console.log("new socket connected")
-    console.log('Players online: ' + PLAYERS_ONLINE)
     map[socket.x][socket.y].player = socket.player;
     pack = {map: map}
     socket.emit("newPosition", pack)
@@ -122,10 +125,14 @@ io.sockets.on('connection', function(socket) {
 
 function generate_events(socket) {
     socket.on('disconnect', function() {
+        PLAYERS_ONLINE--;
+        for(var i in SOCKET_LIST) {
+            var socket = SOCKET_LIST[i]
+            socket.emit('updatePlayers', {players: PLAYERS_ONLINE})
+        }
         map[socket.x][socket.y].player = false
         delete SOCKET_LIST[socket.id]
         console.log("socket disconnected");
-        PLAYERS_ONLINE--;
     })  
 
     socket.on('move', function(data) {
@@ -351,6 +358,7 @@ function reset_map() {
     stopInterval();
     PLAYERS_ALIVE = 0;
     buildMap(PLAYERS_ALIVE);
+    _explodes = []
     for(var i in SOCKET_LIST) {
         // PLAYERS_ONLINE--
         // SOCKET_LIST[i].emit('finish')
@@ -361,7 +369,6 @@ function reset_map() {
         SOCKET_LIST[i].bombStrength = STARTING_STRENGTH;
         SOCKET_LIST[i].bombsUp = 0;
         PLAYERS_ALIVE++;
-        _explodes = []
     }
     startInterval();
 }

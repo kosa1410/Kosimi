@@ -1,4 +1,5 @@
-<canvas id="ctx" width="550" height="550" style="border:1px solid #000000;"></canvas>
+<canvas id="ctx" width="550" height="550" style="border:1px solid #000000;"></canvas><br>
+<b><div id="players"></div></b>
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script>
     var canvas = document.getElementById("ctx")
@@ -44,6 +45,11 @@
     strengthBoostImg.src = 'client/images/strengthBoost.png';
     
     var socket = io();
+
+    socket.on('updatePlayers', function(data) {
+        document.getElementById('players').innerHTML = "PLAYERS ONLINE: " + data.players
+    });
+
     socket.on('newPosition', function(data) {
         ctx.clearRect(0,0,canvas.height, canvas.width);
         for(var i=0; i<data.map.length; i++) {
