@@ -338,6 +338,8 @@ function check_if_user_is_in_explosion_area() {
                 if(socket.x === _explodes[i][1][j].x && socket.y === _explodes[i][1][j].y) {
                     PLAYERS_ALIVE--;
                     map[socket.x][socket.y].player = false
+                    socket.x = -50
+                    socket.y = -50
                     SOCKET_LIST[socket_num].dead = true;
                 }
             }
