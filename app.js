@@ -1,6 +1,6 @@
 var express = require('express');
-var app = express();
-var serv = require('http').Server(app)
+var app = express();	
+var serv = require('http').createServer(app)
 require('./variables.js');
 
 app.get('/', function(req, res) {
@@ -95,7 +95,7 @@ io.sockets.on('connection', function(socket) {
         socket.y = 0;
         socket.player = 'player4'
     } else {
-        socket.x = 10;
+        socket.x = sizeX-1;
         socket.y = 0;
     }
     socket.start = {
@@ -211,6 +211,16 @@ function forInterval() {
     if(_explodes) {
         check_if_user_is_in_explosion_area();
     }
+    for(var i in _explodes) {
+        if(_explodes[i][0].timeToDisappear > 0) {
+            _explodes[i][0].timeToDisappear--;
+        } else {
+            for(var j in _explodes[i][1]) {
+                map[_explodes[i][1][j].x][_explodes[i][1][j].y].explode = false
+            }
+            delete _explodes[i]
+        }
+    }
     for(var i in bombs) {
         var bomb = bombs[i];
         bomb.timeToExplode--;
@@ -220,16 +230,6 @@ function forInterval() {
             SOCKET_LIST[_socket.id] = _socket
             delete bombs[i]
             generateExplode(bomb)
-        }
-    }
-    for(var i in _explodes) {
-        if(_explodes[i][0].timeToDisappear > 0) {
-            _explodes[i][0].timeToDisappear--;
-        } else {
-            for(var j in _explodes[i][1]) {
-                map[_explodes[i][1][j].x][_explodes[i][1][j].y].explode = false
-            }
-            delete _explodes[i]
         }
     }
     var pack = {map: map};
@@ -328,6 +328,28 @@ function generateExplode(bomb) {
     _explodes.push(explodes);
     check_if_wallTD_is_in_explosion_area();
     check_if_user_is_in_explosion_area();
+    check_if_bomb_is_in_explosion_area();
+}
+
+function check_if_bomb_is_in_explosion_area() {
+    for(var bomb_num in bombs) {
+        var bomb = bombs[bomb_num]
+        for(var i in _explodes) {
+            if(_explodes[i]) {
+                for(var j in _explodes[i][1]) {
+                    if(_explodes[i]) {
+                        if(bomb.x === _explodes[i][1][j].x && bomb.y === _explodes[i][1][j].y) {
+                            map[bomb.x][bomb.y].bomb = false
+                            _socket.bombsUp--;
+                            SOCKET_LIST[_socket.id] = _socket
+                            delete bombs[bomb_num]
+                            generateExplode(bomb)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 function check_if_user_is_in_explosion_area() {
