@@ -350,20 +350,8 @@ function check_if_user_is_in_explosion_area() {
 
 function reset_map() {
     stopInterval();
-    map = [
-        [{type: 'floor', x: 0, y: 0},   {type: 'floor', x: 50, y: 0},   {type: 'wallTD', x: 100, y: 0},   {type: 'wallTD', x: 150, y: 0},   {type: 'wallTD', x: 200, y: 0},   {type: 'wallTD', x: 250, y: 0},   {type: 'wallTD', x: 300, y: 0},   {type: 'wallTD', x: 350, y: 0},   {type: 'wallTD', x: 400, y: 0},   {type: 'floor', x: 450, y: 0}, {type: 'floor', x: 500, y: 0}],
-        [{type: 'floor', x: 0, y: 50},  {type: 'wall', x: 50, y: 50},   {type: 'wallTD', x: 100, y: 50},  {type: 'wall', x: 150, y: 50},   {type: 'wallTD', x: 200, y: 50},  {type: 'wall', x: 250, y: 50},   {type: 'wallTD', x: 300, y: 50},  {type: 'wall', x: 350, y: 50},   {type: 'wallTD', x: 400, y: 50},  {type: 'wall', x: 450, y: 50}, {type: 'floor', x: 500, y: 50}],
-        [{type: 'wallTD', x: 0, y: 100}, {type: 'wallTD', x: 50, y: 100}, {type: 'floor', x: 100, y: 100}, {type: 'wallTD', x: 150, y: 100}, {type: 'wallTD', x: 200, y: 100}, {type: 'wallTD', x: 250, y: 100}, {type: 'wallTD', x: 300, y: 100}, {type: 'wallTD', x: 350, y: 100}, {type: 'floor', x: 400, y: 100}, {type: 'wallTD', x: 450, y: 100}, {type: 'wallTD', x: 500, y: 100}],
-        [{type: 'wallTD', x: 0, y: 150}, {type: 'wall', x: 50, y: 150},  {type: 'wallTD', x: 100, y: 150}, {type: 'wall', x: 150, y: 150},  {type: 'wallTD', x: 200, y: 150}, {type: 'wall', x: 250, y: 150},  {type: 'wallTD', x: 300, y: 150}, {type: 'wall', x: 350, y: 150},  {type: 'wallTD', x: 400, y: 150}, {type: 'wall', x: 450, y: 150}, {type: 'wallTD', x: 500, y: 150}],
-        [{type: 'wallTD', x: 0, y: 200}, {type: 'wallTD', x: 50, y: 200}, {type: 'wallTD', x: 100, y: 200}, {type: 'wallTD', x: 150, y: 200}, {type: 'wallTD', x: 200, y: 200}, {type: 'wallTD', x: 250, y: 200}, {type: 'wallTD', x: 300, y: 200}, {type: 'wallTD', x: 350, y: 200}, {type: 'wallTD', x: 400, y: 200}, {type: 'wallTD', x: 450, y: 200}, {type: 'wallTD', x: 500, y: 200}],
-        [{type: 'wallTD', x: 0, y: 250}, {type: 'wall', x: 50, y: 250},  {type: 'wallTD', x: 100, y: 250}, {type: 'wall', x: 150, y: 250},  {type: 'wallTD', x: 200, y: 250}, {type: 'wall', x: 250, y: 250},  {type: 'wallTD', x: 300, y: 250}, {type: 'wall', x: 350, y: 250},  {type: 'wallTD', x: 400, y: 250}, {type: 'wall', x: 450, y: 250}, {type: 'wallTD', x: 500, y: 250}],
-        [{type: 'wallTD', x: 0, y: 300}, {type: 'wallTD', x: 50, y: 300}, {type: 'wallTD', x: 100, y: 300}, {type: 'wallTD', x: 150, y: 300}, {type: 'wallTD', x: 200, y: 300}, {type: 'wallTD', x: 250, y: 300}, {type: 'wallTD', x: 300, y: 300}, {type: 'wallTD', x: 350, y: 300}, {type: 'wallTD', x: 400, y: 300}, {type: 'wallTD', x: 450, y: 300}, {type: 'wallTD', x: 500, y: 300}],
-        [{type: 'wallTD', x: 0, y: 350}, {type: 'wall', x: 50, y: 350},  {type: 'wallTD', x: 100, y: 350}, {type: 'wall', x: 150, y: 350},  {type: 'wallTD', x: 200, y: 350}, {type: 'wall', x: 250, y: 350},  {type: 'wallTD', x: 300, y: 350}, {type: 'wall', x: 350, y: 350},  {type: 'wallTD', x: 400, y: 350}, {type: 'wall', x: 450, y: 350}, {type: 'wallTD', x: 500, y: 350}],
-        [{type: 'wallTD', x: 0, y: 400}, {type: 'wallTD', x: 50, y: 400}, {type: 'floor', x: 100, y: 400}, {type: 'wallTD', x: 150, y: 400}, {type: 'wallTD', x: 200, y: 400}, {type: 'wallTD', x: 250, y: 400}, {type: 'wallTD', x: 300, y: 400}, {type: 'wallTD', x: 350, y: 400}, {type: 'floor', x: 400, y: 400}, {type: 'wallTD', x: 450, y: 400}, {type: 'wallTD', x: 500, y: 400}],
-        [{type: 'floor', x: 0, y: 450}, {type: 'wall', x: 50, y: 450},  {type: 'wallTD', x: 100, y: 450}, {type: 'wall', x: 150, y: 450},  {type: 'wallTD', x: 200, y: 450}, {type: 'wall', x: 250, y: 450},  {type: 'wallTD', x: 300, y: 450}, {type: 'wall', x: 350, y: 450},  {type: 'wallTD', x: 400, y: 450}, {type: 'wall', x: 450, y: 450}, {type: 'floor', x: 500, y: 450}],
-        [{type: 'floor', x: 0, y: 500}, {type: 'floor', x: 50, y: 500}, {type: 'wallTD', x: 100, y: 500}, {type: 'wallTD', x: 150, y: 500}, {type: 'wallTD', x: 200, y: 500}, {type: 'wallTD', x: 250, y: 500}, {type: 'wallTD', x: 300, y: 500}, {type: 'wallTD', x: 350, y: 500}, {type: 'wallTD', x: 400, y: 500}, {type: 'floor', x: 450, y: 500}, {type: 'floor', x: 500, y: 500}],
-    ]
     PLAYERS_ALIVE = 0;
+    buildMap(PLAYERS_ALIVE);
     for(var i in SOCKET_LIST) {
         // PLAYERS_ONLINE--
         // SOCKET_LIST[i].emit('finish')
@@ -375,7 +363,6 @@ function reset_map() {
         SOCKET_LIST[i].bombsUp = 0;
         PLAYERS_ALIVE++;
     }
-    buildMap(1);
     startInterval();
 }
 
