@@ -319,7 +319,6 @@ function generateExplode(bomb) {
         explodesToSend
     )
     _explodes.push(explodes);
-
     check_if_wallTD_is_in_explosion_area();
     check_if_user_is_in_explosion_area();
 }
@@ -362,6 +361,7 @@ function reset_map() {
         SOCKET_LIST[i].bombStrength = STARTING_STRENGTH;
         SOCKET_LIST[i].bombsUp = 0;
         PLAYERS_ALIVE++;
+        _explodes = []
     }
     startInterval();
 }
