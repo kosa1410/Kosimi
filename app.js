@@ -59,13 +59,19 @@ function buildMap(players) {
     map[0][sizeX-1].type = 'floor';
     map[1][sizeX-1].type = 'floor';
     map[0][sizeX-2].type = 'floor';
-    if(players === 1 || players === 2 || players === 3 || players === 4) {
+    if(players === 1) {
         map[10][0].player = 'player1'
-    } else if(players === 2 || players === 3 || players === 4) {
+    } else if(players === 2) {
+        map[10][0].player = 'player1'
         map[10][10].player = 'player2'
-    } else if(players === 3 || players === 4) {
+    } else if(players === 3) {
+        map[10][0].player = 'player1'
+        map[10][10].player = 'player2'
         map[0][10].player = 'player3'
     } else if(players === 4) {
+        map[10][0].player = 'player1'
+        map[10][10].player = 'player2'
+        map[0][10].player = 'player3'
         map[0][0].player = 'player4'
     }
 }
