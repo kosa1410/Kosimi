@@ -14,19 +14,27 @@ app.get('/', function(req, res) {
 
 app.get('/game11', function(req, res) {
     sizeX = 11;
-
+    if (map[0][0] == undefined){
+        buildMap();
+    }
     res.sendFile(__dirname + '/client/index.html');
 });
 
 
 app.get('/game17', function(req, res) {
     sizeX = 17;
+    if (map[0][0] == undefined){
+        buildMap();
+    }
     res.sendFile(__dirname + '/client/index.html');
 });
 
 
 app.get('/game29', function(req, res) {
     sizeX = 29;
+    if (map[0][0] == undefined){
+        buildMap();
+    }
     res.sendFile(__dirname + '/client/index.html');
 });
 app.use(express.static(__dirname + '/client'));
