@@ -1,8 +1,10 @@
 var express = require('express');
 var app = express();
-var serv = require('http').Server(app)
+var serv = require('http').createServer(app)
+var io = require('socket.io').listen(serv);
 var sizeX = 11;
 var rndm;
+
 
 require('./variables.js');
 
@@ -78,7 +80,7 @@ function buildMap(){
     
 
 }
-
+buildMap();
 
 // var map = [
 //     [{type: 'floor', x: 0, y: 0},   {type: 'floor', x: 50, y: 0},   {type: 'wallTD', x: 100, y: 0},   {type: 'wallTD', x: 150, y: 0},   {type: 'wallTD', x: 200, y: 0},   {type: 'wallTD', x: 250, y: 0},   {type: 'wallTD', x: 300, y: 0},   {type: 'wallTD', x: 350, y: 0},   {type: 'wallTD', x: 400, y: 0},   {type: 'floor', x: 450, y: 0}, {type: 'floor', x: 500, y: 0}],
@@ -94,7 +96,6 @@ function buildMap(){
 //     [{type: 'floor', x: 0, y: 500, player: true}, {type: 'floor', x: 50, y: 500}, {type: 'wallTD', x: 100, y: 500}, {type: 'wallTD', x: 150, y: 500}, {type: 'wallTD', x: 200, y: 500}, {type: 'wallTD', x: 250, y: 500}, {type: 'wallTD', x: 300, y: 500}, {type: 'wallTD', x: 350, y: 500}, {type: 'wallTD', x: 400, y: 500}, {type: 'floor', x: 450, y: 500}, {type: 'floor', x: 500, y: 500}],
 // ]
 
-var io = require('socket.io')(serv,{});
 io.sockets.on('connection', function(socket) {
     if(PLAYERS_ONLINE === 0) {
         socket.x = sizeX-1;
@@ -122,7 +123,7 @@ io.sockets.on('connection', function(socket) {
         x: socket.x,
         y: socket.y
     }
-    buildMap();
+    
     PLAYERS_ALIVE++;
     PLAYERS_ONLINE++;
     socket.id = Math.random();
@@ -374,7 +375,7 @@ function check_if_user_is_in_explosion_area() {
 }
 
 function reset_map() {
-buildMap
+buildMap();
     PLAYERS_ALIVE = 0;
     for(var i in SOCKET_LIST) {
         // PLAYERS_ONLINE--
