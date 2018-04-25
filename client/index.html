@@ -94,7 +94,6 @@
     document.addEventListener('keydown', function(e) {
         if(e.keyCode === 37) {
             if(speed_update.left === false) {
-                console.log('x')
                 socket.emit('move', {'directory': 'left'})
                 speed_update.left = true
                 setTimeout(function() { speed_update.left = false }, 100)
