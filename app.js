@@ -235,9 +235,8 @@ function stopInterval() {
 }
 
 function forInterval() {
-    if(_explodes.length>0) {
-        check_if_user_is_in_explosion_area();
-        
+    
+    if(bombs.length>0){
         for(var i in bombs) {
             var bomb = bombs[i];
             bomb.timeToExplode--;
@@ -249,6 +248,9 @@ function forInterval() {
                 generateExplode(bomb)
             }
         }
+    }
+    if(_explodes.length>0) {
+        check_if_user_is_in_explosion_area();
         for(var i in _explodes) {
             if(_explodes[i][0].timeToDisappear > 0) {
                 _explodes[i][0].timeToDisappear--;
@@ -384,7 +386,8 @@ function check_if_user_is_in_explosion_area() {
 }
 
 function reset_map() {
-buildMap();
+    _explodes = [];
+    buildMap();
     PLAYERS_ALIVE = 0;
     for(var i in SOCKET_LIST) {
         // PLAYERS_ONLINE--
