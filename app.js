@@ -49,10 +49,10 @@ var bombs = []
 var room = {link: '3bnr5t', players: {}}
 var _socket = {}
 var _explodes = [];
-var map = new Array(sizeX);
+var map;
 
 function buildMap(){
-
+    map = new Array(sizeX);
     for (var i = 0; i<sizeX; i++){
         map[i]=new Array(sizeX);
     }
@@ -235,28 +235,29 @@ function stopInterval() {
 }
 
 function forInterval() {
-    if(_explodes) {
+    if(_explodes.length>0) {
         check_if_user_is_in_explosion_area();
-    }
-    for(var i in bombs) {
-        var bomb = bombs[i];
-        bomb.timeToExplode--;
-        if(bomb.timeToExplode <= 0) {
-            map[bomb.x][bomb.y].bomb = false
-            _socket.bombsUp--;
-            SOCKET_LIST[_socket.id] = _socket
-            delete bombs[i]
-            generateExplode(bomb)
-        }
-    }
-    for(var i in _explodes) {
-        if(_explodes[i][0].timeToDisappear > 0) {
-            _explodes[i][0].timeToDisappear--;
-        } else {
-            for(var j in _explodes[i][1]) {
-                map[_explodes[i][1][j].x][_explodes[i][1][j].y].explode = false
+        
+        for(var i in bombs) {
+            var bomb = bombs[i];
+            bomb.timeToExplode--;
+            if(bomb.timeToExplode <= 0) {
+                map[bomb.x][bomb.y].bomb = false
+                _socket.bombsUp--;
+                SOCKET_LIST[_socket.id] = _socket
+                delete bombs[i]
+                generateExplode(bomb)
             }
-            delete _explodes[i]
+        }
+        for(var i in _explodes) {
+            if(_explodes[i][0].timeToDisappear > 0) {
+                _explodes[i][0].timeToDisappear--;
+            } else {
+                for(var j in _explodes[i][1]) {
+                    map[_explodes[i][1][j].x][_explodes[i][1][j].y].explode = false
+                }
+                delete _explodes[i]
+            }
         }
     }
     var pack = {map: map};
