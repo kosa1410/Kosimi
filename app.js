@@ -105,7 +105,7 @@ io.sockets.on('connection', function(socket) {
     PLAYERS_ALIVE++;
     PLAYERS_ONLINE++;
     socket.id = Math.random();
-    socket.bombTime = 35;
+    socket.bombTime = 40;
     socket.bombStrength = STARTING_STRENGTH;
     socket.bombLimit = STARTING_BOMB_LIMIT;
     socket.bombsUp = 0;
@@ -223,13 +223,15 @@ function forInterval() {
     }
     for(var i in bombs) {
         var bomb = bombs[i];
-        bomb.timeToExplode--;
-        if(bomb.timeToExplode <= 0) {
-            map[bomb.x][bomb.y].bomb = false
-            _socket.bombsUp--;
-            SOCKET_LIST[_socket.id] = _socket
-            delete bombs[i]
-            generateExplode(bomb)
+        if(bomb) {
+            bomb.timeToExplode--;
+            if(bomb.timeToExplode <= 0) {
+                map[bomb.x][bomb.y].bomb = false
+                _socket.bombsUp--;
+                SOCKET_LIST[_socket.id] = _socket
+                delete bombs[i]
+                generateExplode(bomb)
+            }
         }
     }
     var pack = {map: map};
