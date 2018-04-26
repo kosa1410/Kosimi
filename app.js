@@ -1,42 +1,16 @@
 var express = require('express');
-var app = express();
+var app = express();	
 var serv = require('http').createServer(app)
-var io = require('socket.io').listen(serv);
-var sizeX = 11;
-var rndm;
-
-
 require('./variables.js');
 
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/client/menu.html');
 })
 
-app.get('/game11', function(req, res) {
-    sizeX = 11;
-    if (map[0][0] == undefined){
-        buildMap();
-    }
+app.get('/game', function(req, res) {
     res.sendFile(__dirname + '/client/index.html');
 });
 
-
-app.get('/game17', function(req, res) {
-    sizeX = 17;
-    if (map[0][0] == undefined){
-        buildMap();
-    }
-    res.sendFile(__dirname + '/client/index.html');
-});
-
-
-app.get('/game29', function(req, res) {
-    sizeX = 29;
-    if (map[0][0] == undefined){
-        buildMap();
-    }
-    res.sendFile(__dirname + '/client/index.html');
-});
 app.use(express.static(__dirname + '/client'));
 app.use('/client',express.static(__dirname + '/client'));
 
@@ -49,28 +23,30 @@ var bombs = []
 var room = {link: '3bnr5t', players: {}}
 var _socket = {}
 var _explodes = [];
-var map;
+var sizeX = 11;
+var map = []
 
-function buildMap(){
-    map = new Array(sizeX);
+buildMap(0);
+
+function buildMap(players) {
+    
     for (var i = 0; i<sizeX; i++){
         map[i]=new Array(sizeX);
     }
-
+    
     for (var i = 0; i<sizeX; i++){
         for (var j = 0; j<sizeX; j++){
             map[i][j] = {type: 'wallTD', x: j*50, y: i*50, player : false}; 
             if(i % 2 == 1 && j % 2 == 1 ){
                 map[i][j].type = 'wall'; 
-            }else{
+            } else {
                 if(Math.random() < 0.2){
                     map[i][j].type = 'floor';
                 }
             }
-
         }
     }
-
+    
     map[0][0].type = 'floor';
     map[0][1].type = 'floor';
     map[1][0].type = 'floor';
@@ -83,38 +59,33 @@ function buildMap(){
     map[0][sizeX-1].type = 'floor';
     map[1][sizeX-1].type = 'floor';
     map[0][sizeX-2].type = 'floor';
-
-
-    
-
+    if(players === 1) {
+        map[10][0].player = 'player1'
+    } else if(players === 2) {
+        map[10][0].player = 'player1'
+        map[10][10].player = 'player2'
+    } else if(players === 3) {
+        map[10][0].player = 'player1'
+        map[10][10].player = 'player2'
+        map[0][10].player = 'player3'
+    } else if(players === 4) {
+        map[10][0].player = 'player1'
+        map[10][10].player = 'player2'
+        map[0][10].player = 'player3'
+        map[0][0].player = 'player4'
+    }
 }
-buildMap();
 
-// var map = [
-//     [{type: 'floor', x: 0, y: 0},   {type: 'floor', x: 50, y: 0},   {type: 'wallTD', x: 100, y: 0},   {type: 'wallTD', x: 150, y: 0},   {type: 'wallTD', x: 200, y: 0},   {type: 'wallTD', x: 250, y: 0},   {type: 'wallTD', x: 300, y: 0},   {type: 'wallTD', x: 350, y: 0},   {type: 'wallTD', x: 400, y: 0},   {type: 'floor', x: 450, y: 0}, {type: 'floor', x: 500, y: 0}],
-//     [{type: 'floor', x: 0, y: 50},  {type: 'wall', x: 50, y: 50},   {type: 'wallTD', x: 100, y: 50},  {type: 'wall', x: 150, y: 50},   {type: 'wallTD', x: 200, y: 50},  {type: 'wall', x: 250, y: 50},   {type: 'wallTD', x: 300, y: 50},  {type: 'wall', x: 350, y: 50},   {type: 'wallTD', x: 400, y: 50},  {type: 'wall', x: 450, y: 50}, {type: 'floor', x: 500, y: 50}],
-//     [{type: 'wallTD', x: 0, y: 100}, {type: 'wallTD', x: 50, y: 100}, {type: 'floor', x: 100, y: 100}, {type: 'wallTD', x: 150, y: 100}, {type: 'wallTD', x: 200, y: 100}, {type: 'wallTD', x: 250, y: 100}, {type: 'wallTD', x: 300, y: 100}, {type: 'wallTD', x: 350, y: 100}, {type: 'floor', x: 400, y: 100}, {type: 'wallTD', x: 450, y: 100}, {type: 'wallTD', x: 500, y: 100}],
-//     [{type: 'wallTD', x: 0, y: 150}, {type: 'wall', x: 50, y: 150},  {type: 'wallTD', x: 100, y: 150}, {type: 'wall', x: 150, y: 150},  {type: 'wallTD', x: 200, y: 150}, {type: 'wall', x: 250, y: 150},  {type: 'wallTD', x: 300, y: 150}, {type: 'wall', x: 350, y: 150},  {type: 'wallTD', x: 400, y: 150}, {type: 'wall', x: 450, y: 150}, {type: 'wallTD', x: 500, y: 150}],
-//     [{type: 'wallTD', x: 0, y: 200}, {type: 'wallTD', x: 50, y: 200}, {type: 'wallTD', x: 100, y: 200}, {type: 'wallTD', x: 150, y: 200}, {type: 'wallTD', x: 200, y: 200}, {type: 'wallTD', x: 250, y: 200}, {type: 'wallTD', x: 300, y: 200}, {type: 'wallTD', x: 350, y: 200}, {type: 'wallTD', x: 400, y: 200}, {type: 'wallTD', x: 450, y: 200}, {type: 'wallTD', x: 500, y: 200}],
-//     [{type: 'wallTD', x: 0, y: 250}, {type: 'wall', x: 50, y: 250},  {type: 'wallTD', x: 100, y: 250}, {type: 'wall', x: 150, y: 250},  {type: 'wallTD', x: 200, y: 250}, {type: 'wall', x: 250, y: 250},  {type: 'wallTD', x: 300, y: 250}, {type: 'wall', x: 350, y: 250},  {type: 'wallTD', x: 400, y: 250}, {type: 'wall', x: 450, y: 250}, {type: 'wallTD', x: 500, y: 250}],
-//     [{type: 'wallTD', x: 0, y: 300}, {type: 'wallTD', x: 50, y: 300}, {type: 'wallTD', x: 100, y: 300}, {type: 'wallTD', x: 150, y: 300}, {type: 'wallTD', x: 200, y: 300}, {type: 'wallTD', x: 250, y: 300}, {type: 'wallTD', x: 300, y: 300}, {type: 'wallTD', x: 350, y: 300}, {type: 'wallTD', x: 400, y: 300}, {type: 'wallTD', x: 450, y: 300}, {type: 'wallTD', x: 500, y: 300}],
-//     [{type: 'wallTD', x: 0, y: 350}, {type: 'wall', x: 50, y: 350},  {type: 'wallTD', x: 100, y: 350}, {type: 'wall', x: 150, y: 350},  {type: 'wallTD', x: 200, y: 350}, {type: 'wall', x: 250, y: 350},  {type: 'wallTD', x: 300, y: 350}, {type: 'wall', x: 350, y: 350},  {type: 'wallTD', x: 400, y: 350}, {type: 'wall', x: 450, y: 350}, {type: 'wallTD', x: 500, y: 350}],
-//     [{type: 'wallTD', x: 0, y: 400}, {type: 'wallTD', x: 50, y: 400}, {type: 'floor', x: 100, y: 400}, {type: 'wallTD', x: 150, y: 400}, {type: 'wallTD', x: 200, y: 400}, {type: 'wallTD', x: 250, y: 400}, {type: 'wallTD', x: 300, y: 400}, {type: 'wallTD', x: 350, y: 400}, {type: 'floor', x: 400, y: 400}, {type: 'wallTD', x: 450, y: 400}, {type: 'wallTD', x: 500, y: 400}],
-//     [{type: 'floor', x: 0, y: 450}, {type: 'wall', x: 50, y: 450},  {type: 'wallTD', x: 100, y: 450}, {type: 'wall', x: 150, y: 450},  {type: 'wallTD', x: 200, y: 450}, {type: 'wall', x: 250, y: 450},  {type: 'wallTD', x: 300, y: 450}, {type: 'wall', x: 350, y: 450},  {type: 'wallTD', x: 400, y: 450}, {type: 'wall', x: 450, y: 450}, {type: 'floor', x: 500, y: 450}],
-//     [{type: 'floor', x: 0, y: 500, player: true}, {type: 'floor', x: 50, y: 500}, {type: 'wallTD', x: 100, y: 500}, {type: 'wallTD', x: 150, y: 500}, {type: 'wallTD', x: 200, y: 500}, {type: 'wallTD', x: 250, y: 500}, {type: 'wallTD', x: 300, y: 500}, {type: 'wallTD', x: 350, y: 500}, {type: 'wallTD', x: 400, y: 500}, {type: 'floor', x: 450, y: 500}, {type: 'floor', x: 500, y: 500}],
-// ]
-
+var io = require('socket.io')(serv,{});
 io.sockets.on('connection', function(socket) {
     if(PLAYERS_ONLINE === 0) {
         socket.x = sizeX-1;
         socket.y = 0;
         socket.player = 'player1'
-
     } else if(PLAYERS_ONLINE === 1) {
         socket.x = sizeX-1;
         socket.y = sizeX-1;
         socket.player = 'player2'
-        
     } else if(PLAYERS_ONLINE === 2) {
         socket.x = 0;
         socket.y = sizeX-1;
@@ -131,18 +102,20 @@ io.sockets.on('connection', function(socket) {
         x: socket.x,
         y: socket.y
     }
-    
     PLAYERS_ALIVE++;
     PLAYERS_ONLINE++;
     socket.id = Math.random();
-    socket.bombTime = 35;
+    socket.bombTime = 40;
     socket.bombStrength = STARTING_STRENGTH;
     socket.bombLimit = STARTING_BOMB_LIMIT;
     socket.bombsUp = 0;
     SOCKET_LIST[socket.id] = socket
     _socket = socket;
+    for(var i in SOCKET_LIST) {
+        var socket = SOCKET_LIST[i]
+        socket.emit('updatePlayers', {players: PLAYERS_ONLINE})
+    }
     console.log("new socket connected")
-    console.log('Players online: ' + PLAYERS_ONLINE)
     map[socket.x][socket.y].player = socket.player;
     pack = {map: map}
     socket.emit("newPosition", pack)
@@ -152,18 +125,21 @@ io.sockets.on('connection', function(socket) {
 
 function generate_events(socket) {
     socket.on('disconnect', function() {
+        PLAYERS_ONLINE--;
+        for(var i in SOCKET_LIST) {
+            var socket = SOCKET_LIST[i]
+            socket.emit('updatePlayers', {players: PLAYERS_ONLINE})
+        }
         map[socket.x][socket.y].player = false
         delete SOCKET_LIST[socket.id]
         console.log("socket disconnected");
-        PLAYERS_ONLINE--;
     })  
 
     socket.on('move', function(data) {
         _socket = socket
         if(data.directory === 'left') {
             if(!(socket.y - 1 < 0 || 
-                map[socket.x][socket.y - 1].type === 'wall' || 
-                socket.y - 1 < 0 || 
+                map[socket.x][socket.y - 1].type === 'wall' ||
                 map[socket.x][socket.y - 1].type === 'wallTD' || 
                 map[socket.x][socket.y - 1].player || 
                 map[socket.x][socket.y - 1].bomb)) {
@@ -173,8 +149,7 @@ function generate_events(socket) {
             }
         } else if(data.directory === 'right') {
             if(!(socket.y + 1 > sizeX-1 || 
-                map[socket.x][socket.y + 1].type === 'wall' || 
-                socket.y + 1 > sizeX-1 || 
+                map[socket.x][socket.y + 1].type === 'wall' ||
                 map[socket.x][socket.y + 1].type === 'wallTD' || 
                 map[socket.x][socket.y + 1].player || 
                 map[socket.x][socket.y + 1].bomb)) {
@@ -184,25 +159,23 @@ function generate_events(socket) {
             }
         } else if(data.directory === 'up') {
             if(!(socket.x - 1 < 0 || 
-                map[socket.x - 1][socket.y].type === 'wall' || 
-                socket.x - 1 < 0 || 
+                map[socket.x - 1][socket.y].type === 'wall' ||
                 map[socket.x - 1][socket.y].type === 'wallTD' || 
                 map[socket.x - 1][socket.y].player || 
                 map[socket.x - 1][socket.y].bomb)) {
                     map[socket.x][socket.y].player = false;
                     socket.x -= 1
-                    map[socket.x][socket.y].player = socket.player;
+                    map[socket.x][socket.y].player = socket.player
             }
         } else if(data.directory === 'down') {
             if(!(socket.x + 1 > sizeX-1 || 
-                map[socket.x + 1][socket.y].type === 'wall' || 
-                socket.x + 1 > sizeX-1 || 
+                map[socket.x + 1][socket.y].type === 'wall' ||
                 map[socket.x + 1][socket.y].type === 'wallTD' || 
                 map[socket.x + 1][socket.y].player || 
                 map[socket.x + 1][socket.y].bomb)) {
                     map[socket.x][socket.y].player = false;
                     socket.x += 1;
-                    map[socket.x][socket.y].player = socket.player;
+                    map[socket.x][socket.y].player = socket.player
             }
         }
         check_if_user_is_on_field_with_boost();
@@ -235,10 +208,22 @@ function stopInterval() {
 }
 
 function forInterval() {
-    
-    if(bombs.length>0){
-        for(var i in bombs) {
-            var bomb = bombs[i];
+    if(_explodes) {
+        check_if_user_is_in_explosion_area();
+    }
+    for(var i in _explodes) {
+        if(_explodes[i][0].timeToDisappear > 0) {
+            _explodes[i][0].timeToDisappear--;
+        } else {
+            for(var j in _explodes[i][1]) {
+                map[_explodes[i][1][j].x][_explodes[i][1][j].y].explode = false
+            }
+            delete _explodes[i]
+        }
+    }
+    for(var i in bombs) {
+        var bomb = bombs[i];
+        if(bomb) {
             bomb.timeToExplode--;
             if(bomb.timeToExplode <= 0) {
                 map[bomb.x][bomb.y].bomb = false
@@ -246,19 +231,6 @@ function forInterval() {
                 SOCKET_LIST[_socket.id] = _socket
                 delete bombs[i]
                 generateExplode(bomb)
-            }
-        }
-    }
-    if(_explodes.length>0) {
-        check_if_user_is_in_explosion_area();
-        for(var i in _explodes) {
-            if(_explodes[i][0].timeToDisappear > 0) {
-                _explodes[i][0].timeToDisappear--;
-            } else {
-                for(var j in _explodes[i][1]) {
-                    map[_explodes[i][1][j].x][_explodes[i][1][j].y].explode = false
-                }
-                delete _explodes[i]
             }
         }
     }
@@ -356,9 +328,30 @@ function generateExplode(bomb) {
         explodesToSend
     )
     _explodes.push(explodes);
-
     check_if_wallTD_is_in_explosion_area();
     check_if_user_is_in_explosion_area();
+    check_if_bomb_is_in_explosion_area();
+}
+
+function check_if_bomb_is_in_explosion_area() {
+    for(var bomb_num in bombs) {
+        var bomb = bombs[bomb_num]
+        for(var i in _explodes) {
+            if(_explodes[i]) {
+                for(var j in _explodes[i][1]) {
+                    if(_explodes[i]) {
+                        if(bomb.x === _explodes[i][1][j].x && bomb.y === _explodes[i][1][j].y) {
+                            map[bomb.x][bomb.y].bomb = false
+                            _socket.bombsUp--;
+                            SOCKET_LIST[_socket.id] = _socket
+                            delete bombs[bomb_num]
+                            generateExplode(bomb)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 function check_if_user_is_in_explosion_area() {
@@ -376,23 +369,23 @@ function check_if_user_is_in_explosion_area() {
             }
         }
     }
-                    if(PLAYERS_ONLINE > 1) {
-                        if(PLAYERS_ALIVE <= 1) {
-                            reset_map()
-                        }
-                    } else {
-                        if(PLAYERS_ALIVE <= 0) {
-                            reset_map();
-                        }
-                    }
-                }
-     
+    if(PLAYERS_ONLINE > 1) {
+        if(PLAYERS_ALIVE <= 1) {
+            reset_map()
+        }
+    } else {
+        if(PLAYERS_ALIVE <= 0) {
+            reset_map();
+        }
+    }
+}
 
 function reset_map() {
     stopInterval();
     PLAYERS_ALIVE = 0;
-    buildMap();
     _explodes = []
+    bombs = []
+    buildMap(PLAYERS_ALIVE);
     for(var i in SOCKET_LIST) {
         // PLAYERS_ONLINE--
         // SOCKET_LIST[i].emit('finish')
