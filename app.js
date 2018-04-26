@@ -382,6 +382,7 @@ function reset_map() {
     stopInterval();
     PLAYERS_ALIVE = 0;
     _explodes = []
+    bombs = []
     buildMap(PLAYERS_ALIVE);
     for(var i in SOCKET_LIST) {
         // PLAYERS_ONLINE--
