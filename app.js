@@ -328,7 +328,7 @@ function generateExplode(bomb) {
         explodesToSend
     )
     _explodes.push(explodes);
-    check_if_wallTD_is_in_explosion_area();
+    check_if_wallTD_or_bonus_is_in_explosion_area();
     check_if_user_is_in_explosion_area();
     check_if_bomb_is_in_explosion_area();
 }
@@ -400,7 +400,7 @@ function reset_map() {
     startInterval();
 }
 
-function check_if_wallTD_is_in_explosion_area() {
+function check_if_wallTD_or_bonus_is_in_explosion_area() {
     for(var i in _explodes) {
         for(var j in _explodes[i][1]) {
             if(map[_explodes[i][1][j].x][_explodes[i][1][j].y].type === 'wallTD') {
@@ -412,6 +412,10 @@ function check_if_wallTD_is_in_explosion_area() {
                 } else if(random >= 16 && random <= 30) {
                     map[_explodes[i][1][j].x][_explodes[i][1][j].y].strengthBoost = true;
                 }
+            } else if(map[_explodes[i][1][j].x][_explodes[i][1][j].y].bombBoost === true) {
+                map[_explodes[i][1][j].x][_explodes[i][1][j].y].bombBoost = false
+            } else if(map[_explodes[i][1][j].x][_explodes[i][1][j].y].strengthBoost === true) {
+                map[_explodes[i][1][j].x][_explodes[i][1][j].y].strengthBoost = false
             }
         }
     }
