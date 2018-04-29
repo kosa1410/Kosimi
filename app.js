@@ -186,7 +186,7 @@ function generate_events(socket) {
                     map[socket.x][socket.y].player = socket.player
                 }
             }
-            
+    check_if_user_is_on_field_with_boost();
     var pack = { map: map };
     io.emit('newPosition', pack);
     // for (var i in SOCKET_LIST) {
@@ -209,6 +209,7 @@ function generate_events(socket) {
                     owner: socket
                 })
                 socket.bombsUp++;
+                io.emit('newPosition', pack);
             }
         }
     })
@@ -243,7 +244,7 @@ function forInterval(){
                 }
             }
             for (var i in _explodes) {
-                        if (_explodes[i][0].timeToDisappear > t) {
+                        if (_explodes[i][0].timeToDisappear <= t) {
                         for (var j in _explodes[i][1]) {
                                 map[_explodes[i][1][j].x][_explodes[i][1][j].y].explode = false
                             }
