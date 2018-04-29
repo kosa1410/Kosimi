@@ -1,5 +1,6 @@
 <canvas id="ctx" width="550" height="550" style="border:1px solid #000000;"></canvas><br>
 <b><div id="players"></div></b>
+<b><div id="time"></div></b>
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script>
     var canvas = document.getElementById("ctx")
@@ -49,6 +50,12 @@
     socket.on('updatePlayers', function(data) {
         document.getElementById('players').innerHTML = "PLAYERS ONLINE: " + data.players
     });
+
+
+    socket.on('updateTime', function(data) {
+        document.getElementById('time').innerHTML = data;
+    });
+
 
     socket.on('newPosition', function(data) {
         ctx.clearRect(0,0,canvas.height, canvas.width);

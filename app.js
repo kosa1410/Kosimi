@@ -3,6 +3,8 @@ var app = express();
 var serv = require('http').createServer(app)
 require('./variables.js');
 
+var t=1;
+
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/client/menu.html');
 })
@@ -102,23 +104,26 @@ io.sockets.on('connection', function (socket) {
         x: socket.x,
         y: socket.y
     }
+    socket.dead = false;
     PLAYERS_ALIVE++;
     PLAYERS_ONLINE++;
     socket.id = Math.random();
-    socket.bombTime = 40;
+    socket.bombTime = 2;
     socket.bombStrength = STARTING_STRENGTH;
     socket.bombLimit = STARTING_BOMB_LIMIT;
     socket.bombsUp = 0;
     SOCKET_LIST[socket.id] = socket
     _socket = socket;
-    for (var i in SOCKET_LIST) {
-        var socket = SOCKET_LIST[i]
-        socket.emit('updatePlayers', { players: PLAYERS_ONLINE })
-    }
+    io.emit('updatePlayers', { players: PLAYERS_ONLINE })
+
+    // for (var i in SOCKET_LIST) {
+    //     var socket = SOCKET_LIST[i]
+    //     socket.emit('updatePlayers', { players: PLAYERS_ONLINE })
+    // }
     console.log("new socket connected")
     map[socket.x][socket.y].player = socket.player;
     pack = { map: map }
-    socket.emit("newPosition", pack)
+    io.emit("newPosition", pack)
 
     generate_events(socket)
 })
@@ -126,17 +131,19 @@ io.sockets.on('connection', function (socket) {
 function generate_events(socket) {
     socket.on('disconnect', function () {
         PLAYERS_ONLINE--;
-        for (var i in SOCKET_LIST) {
-            var socket = SOCKET_LIST[i]
-            socket.emit('updatePlayers', { players: PLAYERS_ONLINE })
-        }
+        io.emit('updatePlayers', { players: PLAYERS_ONLINE })
+
+        // for (var i in SOCKET_LIST) {
+        //     var socket = SOCKET_LIST[i]
+        //     socket.emit('updatePlayers', { players: PLAYERS_ONLINE })
+        // }
         map[socket.x][socket.y].player = false
         delete SOCKET_LIST[socket.id]
         console.log("socket disconnected");
     })
 
     socket.on('move', function (data) {
-        if (socket.dead !== true) {
+        if (socket.dead != true) {
             _socket = socket
             if (data.directory === 'left') {
                 if (!(socket.y - 1 < 0 ||
@@ -179,7 +186,15 @@ function generate_events(socket) {
                     map[socket.x][socket.y].player = socket.player
                 }
             }
-            check_if_user_is_on_field_with_boost();
+            
+    var pack = { map: map };
+    io.emit('newPosition', pack);
+    // for (var i in SOCKET_LIST) {
+    //     var thsSck = SOCKET_LIST[i]
+    //     socket.emit('newPosition', pack)
+    // }
+            //
+           // check_if_user_is_on_field_with_boost();
         }
     })
 
@@ -190,7 +205,7 @@ function generate_events(socket) {
                 bombs.push({
                     x: socket.x,
                     y: socket.y,
-                    timeToExplode: socket.bombTime,
+                    timeToExplode: t+socket.bombTime,
                     owner: socket
                 })
                 socket.bombsUp++;
@@ -202,7 +217,7 @@ function generate_events(socket) {
 var game;
 
 function startInterval() {
-    game = setInterval(forInterval, 1000 / 25)
+    game = setInterval(forInterval, 1000)
 }
 
 startInterval();
@@ -211,44 +226,73 @@ function stopInterval() {
     clearInterval(game)
 }
 
-function forInterval() {
-    if (_explodes) {
-        check_if_user_is_in_explosion_area();
-    }
-    for (var i in _explodes) {
-        if (_explodes[i][0].timeToDisappear > 0) {
-            _explodes[i][0].timeToDisappear--;
-        } else {
-            for (var j in _explodes[i][1]) {
-                map[_explodes[i][1][j].x][_explodes[i][1][j].y].explode = false
-            }
-            delete _explodes[i]
-        }
-    }
+
+function forInterval(){
+    t=t+1;
+    io.emit('updateTime',t);
     for (var i in bombs) {
-        var bomb = bombs[i];
-        if (bomb) {
-            bomb.timeToExplode--;
-            if (bomb.timeToExplode <= 0) {
-                map[bomb.x][bomb.y].bomb = false
-                _socket.bombsUp--;
-                SOCKET_LIST[_socket.id] = _socket
-                delete bombs[i]
-                generateExplode(bomb)
+                var bomb = bombs[i];
+                if (bomb) {
+                    if (bomb.timeToExplode <= t) {
+                        map[bomb.x][bomb.y].bomb = false
+                        _socket.bombsUp--;
+                        //SOCKET_LIST[_socket.id] = _socket
+                        delete bombs[i]
+                        generateExplode(bomb)
+                    }
+                }
             }
-        }
-    }
-    var pack = { map: map };
-    for (var i in SOCKET_LIST) {
-        var socket = SOCKET_LIST[i]
-        socket.emit('newPosition', pack)
-    }
+            for (var i in _explodes) {
+                        if (_explodes[i][0].timeToDisappear > t) {
+                        for (var j in _explodes[i][1]) {
+                                map[_explodes[i][1][j].x][_explodes[i][1][j].y].explode = false
+                            }
+                            delete _explodes[i];
+                            pack = {map: map};
+                            io.emit('newPosition', pack);
+                        }
+                    }
 }
+
+// function forInterval() {
+//     if (_explodes) {
+//         check_if_user_is_in_explosion_area();
+//     }
+//     for (var i in _explodes) {
+//         if (_explodes[i][0].timeToDisappear > 0) {
+//             _explodes[i][0].timeToDisappear--;
+//         } else {
+//             for (var j in _explodes[i][1]) {
+//                 map[_explodes[i][1][j].x][_explodes[i][1][j].y].explode = false
+//             }
+//             delete _explodes[i]
+//         }
+//     }
+//     for (var i in bombs) {
+//         var bomb = bombs[i];
+//         if (bomb) {
+//             bomb.timeToExplode--;
+//             if (bomb.timeToExplode <= 0) {
+//                 map[bomb.x][bomb.y].bomb = false
+//                 _socket.bombsUp--;
+//                 SOCKET_LIST[_socket.id] = _socket
+//                 delete bombs[i]
+//                 generateExplode(bomb)
+//             }
+//         }
+//     }
+//     var pack = { map: map };
+//     io.emit('newPosition', pack)
+//     // for (var i in SOCKET_LIST) {
+//     //     var socket = SOCKET_LIST[i]
+//     //     socket.emit('newPosition', pack)
+//     // }
+// }
 
 function generateExplode(bomb) {
     var wallUp, wallDown, wallLeft, wallRight;
     map[bomb.x][bomb.y].explode = true
-    var explodes = [{ timeToDisappear: 15 }]
+    var explodes = [{ timeToDisappear: t+1 }]
     var explodesToSend = [];
     explodesToSend.push({
         x: bomb.x,
@@ -335,6 +379,8 @@ function generateExplode(bomb) {
     check_if_wallTD_or_bonus_is_in_explosion_area();
     check_if_user_is_in_explosion_area();
     check_if_bomb_is_in_explosion_area();
+    pack = {map: map};
+    io.emit('newPosition', pack);
 }
 
 function check_if_bomb_is_in_explosion_area() {
@@ -385,7 +431,7 @@ function check_if_user_is_in_explosion_area() {
 }
 
 function reset_map() {
-    stopInterval();
+    //stopInterval();
     PLAYERS_ALIVE = 0;
     _explodes = []
     bombs = []
@@ -402,7 +448,7 @@ function reset_map() {
         SOCKET_LIST[i].bombsUp = 0;
         PLAYERS_ALIVE++;
     }
-    startInterval();
+    //startInterval();
 }
 
 function check_if_wallTD_or_bonus_is_in_explosion_area() {
