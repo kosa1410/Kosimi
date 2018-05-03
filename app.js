@@ -187,6 +187,7 @@ function generate_events(socket) {
                 }
             }
     check_if_user_is_on_field_with_boost();
+    check_if_user_is_in_explosion_area();
     var pack = { map: map };
     io.emit('newPosition', pack);
     // for (var i in SOCKET_LIST) {
