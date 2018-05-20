@@ -20,6 +20,7 @@
 <script>
     var canvas = document.getElementById("ctx")
     var ctx = canvas.getContext("2d");
+    var player = '';
     var speed_update = {
         left: false,
         right: false,
@@ -71,6 +72,10 @@
         document.getElementById('time').innerHTML = data;
     });
 
+    socket.on('setPlayer', function(data) {
+        player = data.player;
+    });
+
 
     socket.on('newPosition', function(data) {
         ctx.clearRect(0,0,canvas.height, canvas.width);
@@ -94,17 +99,10 @@
                 if(data.map[i][j].strengthBoost) {
                     ctx.drawImage(strengthBoostImg, data.map[i][j].x, data.map[i][j].y, 50, 50);
                 }
-                if(data.map[i][j].player === 'player1') {
+                if(data.map[i][j].player === player) {
                     ctx.drawImage(hero1Img, data.map[i][j].x, data.map[i][j].y, 50, 50);
-                }
-                if(data.map[i][j].player === 'player2') {
+                } else if(data.map[i][j].player) {
                     ctx.drawImage(hero2Img, data.map[i][j].x, data.map[i][j].y, 50, 50);
-                }
-                if(data.map[i][j].player === 'player3') {
-                    ctx.drawImage(hero3Img, data.map[i][j].x, data.map[i][j].y, 50, 50);
-                }
-                if(data.map[i][j].player === 'player4') {
-                    ctx.drawImage(hero4Img, data.map[i][j].x, data.map[i][j].y, 50, 50);
                 }
                 if(data.map[i][j].explode) {
                     ctx.drawImage(explodeImg, data.map[i][j].x, data.map[i][j].y, 50, 50);

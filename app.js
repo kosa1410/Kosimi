@@ -100,6 +100,7 @@ io.sockets.on('connection', function (socket) {
         socket.x = sizeX - 1;
         socket.y = 0;
     }
+    socket.emit('setPlayer', { player: socket.player });
     socket.start = {
         x: socket.x,
         y: socket.y
@@ -139,6 +140,8 @@ function generate_events(socket) {
         // }
         map[socket.x][socket.y].player = false
         delete SOCKET_LIST[socket.id]
+        var pack = { map: map };
+        io.emit('newPosition', pack);
         console.log("socket disconnected");
     })
 
