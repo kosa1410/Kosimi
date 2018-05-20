@@ -1,5 +1,8 @@
 <canvas id="ctx" width="550" height="550" style="border:1px solid #000000;"></canvas>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+<form style="display: hidden" action="/game" method="POST" id="game">
+	<input type="hidden" id="access_token" value="x">
+</form>
 <style>
     canvas {
         padding-left: 0;
@@ -72,7 +75,7 @@
             
         } else if(e.keyCode === 13) {
 			if(option1.actv === true) {
-				window.location.href = '/game';
+				document.getElementById('game').submit();
 			} else if(option2.actv === true) {
 
 			} else if(option3.actv === true) {

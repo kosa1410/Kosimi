@@ -10,6 +10,10 @@ app.get('/', function (req, res) {
 })
 
 app.get('/game', function (req, res) {
+    res.sendFile(__dirname + '/client/menu.html');
+});
+
+app.post('/game', function (req, res) {
     res.sendFile(__dirname + '/client/index.html');
 });
 
