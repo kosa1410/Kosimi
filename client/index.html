@@ -2,6 +2,21 @@
 <b><div id="players"></div></b>
 <b><div id="time"></div></b>
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<style>
+    canvas {
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+    #players {
+        text-align: center;
+    }
+    #time {
+        text-align: center;
+    }
+</style>
 <script>
     var canvas = document.getElementById("ctx")
     var ctx = canvas.getContext("2d");
