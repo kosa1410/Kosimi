@@ -120,6 +120,7 @@ io.sockets.on('connection', function (socket) {
     SOCKET_LIST[socket.id] = socket
     _socket = socket;
     io.emit('updatePlayers', { players: PLAYERS_ONLINE })
+    io.emit('updatePlayersAlive', { players: PLAYERS_ALIVE })
 
     // for (var i in SOCKET_LIST) {
     //     var socket = SOCKET_LIST[i]
@@ -136,7 +137,9 @@ io.sockets.on('connection', function (socket) {
 function generate_events(socket) {
     socket.on('disconnect', function () {
         PLAYERS_ONLINE--;
+        PLAYERS_ALIVE--;
         io.emit('updatePlayers', { players: PLAYERS_ONLINE })
+        io.emit('updatePlayersAlive', { players: PLAYERS_ALIVE })
 
         // for (var i in SOCKET_LIST) {
         //     var socket = SOCKET_LIST[i]
