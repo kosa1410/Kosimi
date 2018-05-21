@@ -2,6 +2,15 @@
 <b><div id="players"></div></b>
 <b><div id="playersAlive"></div></b>
 <b><div id="time"></div></b>
+<img src="client/images/bomb.png" style="display: none;" />
+<img src="client/images/player1.png" style="display: none;" />
+<img src="client/images/player2.png" style="display: none;" />
+<img src="client/images/wall.png" style="display: none;" />
+<img src="client/images/floor.png" style="display: none;" />
+<img src="client/images/rock.png" style="display: none;" />
+<img src="client/images/wood.png" style="display: none;" />
+<img src="client/images/bombBoost.png" style="display: none;" />
+<img src="client/images/strengthBoost.png" style="display: none;" />
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <style>
     canvas {
@@ -40,12 +49,6 @@
 
     var hero2Img = new Image()
     hero2Img.src = 'client/images/player2.png';
-    
-    var hero3Img = new Image()
-    hero3Img.src = 'client/images/player3.png';
-    
-    var hero4Img = new Image()
-    hero4Img.src = 'client/images/player4.png';
 
     var wallImg = new Image()
     wallImg.src = 'client/images/wall.png';
