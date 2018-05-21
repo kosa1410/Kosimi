@@ -17,6 +17,17 @@ app.post('/game', function (req, res) {
     res.sendFile(__dirname + '/client/index.html');
 });
 
+app.get('/random', function (req, res) {
+    res.sendFile(__dirname + '/client/index.html');
+    randomMode = true;
+});
+
+app.get('/battle', function (req, res) {
+    res.sendFile(__dirname + '/client/index.html');
+    battleRoyalMode = true;
+    zone = 0;
+});
+
 app.use(express.static(__dirname + '/client'));
 app.use('/client', express.static(__dirname + '/client'));
 
@@ -24,6 +35,9 @@ app.use('/client', express.static(__dirname + '/client'));
 serv.listen(process.env.PORT || 2000);
 console.log('Server started');
 
+var zone;
+var battleRoyalMode = false;
+var randomMode = false;
 var SOCKET_LIST = {}
 var bombs = []
 var room = { link: '3bnr5t', players: {} }
@@ -304,6 +318,17 @@ function stopInterval() {
 function forInterval(){
     t=t+1;
     io.emit('updateTime',t);
+
+    if(PLAYERS_ALIVE>=1 && randomMode == true && t % 10 == 0 ){
+        
+        randomizeMap();
+    }
+    if(PLAYERS_ALIVE>=1 && battleRoyalMode == true && t % 25 == 0){
+        battleRoyal(zone);
+        zone++;
+    }
+    
+
     for (var i in bombs) {
                 var bomb = bombs[i];
                 if (bomb) {
@@ -524,6 +549,61 @@ function reset_map() {
     }
     //startInterval();
 }
+
+function randomizeMap(){
+    for (var i = 0; i < sizeX; i++) {
+        for (var j = 0; j < sizeX; j++) {
+                  
+            if (map[i][j].player == false && map[checkRange(i-1)][j].player == false && map[checkRange(i+1)][j].player == false && map[i][checkRange(j-1)].player == false  && map[i][checkRange(j+1)].player == false){
+                map[i][j] = { type: 'wallTD', x: j * 50, y: i * 50, player: false};
+                if (i % 2 == 1 && j % 2 == 1) {
+                    map[i][j].type = 'wall';
+                } else {
+                    if (Math.random() < 0.4) {
+                        map[i][j].type = 'floor';
+                    }
+                }
+            }
+       }
+    }
+    pack = {map: map};
+    io.emit('newPosition', pack);
+}
+
+function battleRoyal(zone){
+    var explodes = [];
+    for (var i = 0; i < sizeX; i++) {
+        for (var j = 0; j < sizeX; j++) {
+            if(i==zone || i == sizeX - 1 - zone){
+                
+                map[i][j].explode=true;
+                // explodes.push({
+                //     x : i,
+                //     y : j,
+                //     timeToDisappear :30}) <<<< CZEMU TO NIE DZIALA ? TypeError: Cannot read property 'undefined' of undefined
+            }else if (j == zone || j == sizeX - 1 - zone){
+                map[i][j].explode=true;
+                // explodes.push({
+                //     x : i,
+                //     y : j,
+                //     timeToDisappear :30})
+            }
+       }
+    }
+   // _explodes.push(explodes);
+    pack = {map: map};
+    io.emit('newPosition', pack);
+}
+
+function checkRange(i){
+    if(i < 0){
+        return 0;
+    }else if (i >= sizeX){
+        return sizeX-1;
+    }
+    return i;
+}
+
 
 function check_if_wallTD_or_bonus_is_in_explosion_area() {
     for (var i in _explodes) {
