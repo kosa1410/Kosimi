@@ -99,6 +99,8 @@ function buildMap(players) {
 var io = require('socket.io')(serv, {});
 io.sockets.on('connection', function (socket) {
     if (PLAYERS_ONLINE === 0) {
+        
+        startInterval();
         socket.x = sizeX - 1;
         socket.y = 0;
         socket.player = 'player1'
@@ -246,7 +248,6 @@ function startInterval() {
     game = setInterval(forInterval, 1000)
 }
 
-startInterval();
 
 function stopInterval() {
     clearInterval(game)
@@ -254,14 +255,19 @@ function stopInterval() {
 
 
 function forInterval(){
+    if(PLAYERS_ONLINE<1){
+        stopInterval();
+        t=0;
+        battleRoyalMode = false;
+        randomMode = false;
+    }
     t=t+1;
     io.emit('updateTime',t);
 
-    if(PLAYERS_ALIVE>=1 && randomMode == true && t % 10 == 0 ){
-        
+    if(PLAYERS_ONLINE>=1 && randomMode == true && t % 10 == 0 ){
         randomizeMap();
     }
-    if(PLAYERS_ALIVE>=1 && battleRoyalMode == true && t % 25 == 0){
+    if(PLAYERS_ONLINE>=1 && battleRoyalMode == true && t % 25 == 0){
         battleRoyal(zone);
         zone++;
     }
@@ -497,7 +503,7 @@ function randomizeMap(){
                 if (i % 2 == 1 && j % 2 == 1) {
                     map[i][j].type = 'wall';
                 } else {
-                    if (Math.random() < 0.4) {
+                    if (Math.random() < 0.6) {
                         map[i][j].type = 'floor';
                     }
                 }
