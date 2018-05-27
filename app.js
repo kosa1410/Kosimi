@@ -96,26 +96,87 @@ function buildMap(players) {
     }
 }
 
+function checkIfPlayerIsTaken(player) {
+    for (var socket in SOCKET_LIST) {
+        if (SOCKET_LIST[socket].player === player) {
+            return true;
+        }
+    }
+    return false;
+}
+
+const players = {
+    player1: {
+        x: sizeX - 1,
+        y: 0,
+        player: 'player1'
+    },
+    player2: {
+        x: sizeX - 1,
+        y: sizeX - 1,
+        player: 'player2'
+    },
+    player3: {
+        x: 0,
+        y: sizeX - 1,
+        player: 'player3'
+    },
+    player4: {
+        x: 0,
+        y: 0,
+        player: 'player4'
+    }
+}
+
 var io = require('socket.io')(serv, {});
 io.sockets.on('connection', function (socket) {
     if (PLAYERS_ONLINE === 0) {
-        
         startInterval();
-        socket.x = sizeX - 1;
-        socket.y = 0;
-        socket.player = 'player1'
+        socket.x = players.player1.x;
+        socket.y = players.player1.y;
+        socket.player = players.player1.player;
     } else if (PLAYERS_ONLINE === 1) {
-        socket.x = sizeX - 1;
-        socket.y = sizeX - 1;
-        socket.player = 'player2'
+        if (!checkIfPlayerIsTaken('player2')) {
+            socket.x = players.player2.x;
+            socket.y = players.player2.y;
+            socket.player = players.player2.player;
+        } else {
+            socket.x = players.player1.x;
+            socket.y = players.player1.y;
+            socket.player = players.player1.player;
+        }
     } else if (PLAYERS_ONLINE === 2) {
-        socket.x = 0;
-        socket.y = sizeX - 1;
-        socket.player = 'player3'
+        if(!checkIfPlayerIsTaken('player3')) {
+            socket.x = players.player3.x;
+            socket.y = players.player3.y;
+            socket.player = players.player3.player;
+        } else if (!checkIfPlayerIsTaken('player2')) {
+            socket.x = players.player2.x;
+            socket.y = players.player2.y;
+            socket.player = players.player2.player;
+        } else {
+            socket.x = players.player1.x;
+            socket.y = players.player1.y;
+            socket.player = players.player1.player;
+        }
     } else if (PLAYERS_ONLINE === 3) {
-        socket.x = 0;
-        socket.y = 0;
-        socket.player = 'player4'
+        if (!checkIfPlayerIsTaken('player4')) {
+            socket.x = players.player4.x;
+            socket.y = players.player4.y;
+            socket.player = players.player4.player;
+        } else if (!checkIfPlayerIsTaken('player3')) {
+            socket.x = players.player3.x;
+            socket.y = players.player3.y;
+            socket.player = players.player3.player;
+        } else if (!checkIfPlayerIsTaken('player2')) {
+            socket.x = players.player2.x;
+            socket.y = players.player2.y;
+            socket.player = players.player2.player;
+        } else {
+            socket.x = players.player1.x;
+            socket.y = players.player1.y;
+            socket.player = players.player1.player;
+        }
     } else {
         socket.x = sizeX - 1;
         socket.y = 0;
