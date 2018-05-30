@@ -3,6 +3,12 @@
 <form style="display: hidden" action="/game" method="POST" id="game">
 	<input type="hidden" id="access_token" value="x">
 </form>
+<form style="display: hidden" action="/random" method="POST" id="random">
+	<input type="hidden" id="access_token" value="x">
+</form>
+<form style="display: hidden" action="/battle" method="POST" id="battle">
+	<input type="hidden" id="access_token" value="x">
+</form>
 <style>
     canvas {
         padding-left: 0;
@@ -20,9 +26,9 @@
 	var bombImage = new Image();
 	bombImage.src = 'images/bomb.png';
 	//var bombPointer = {Image:bombImage,x : 0 ,y:10};
-	var option1 = {value:"a", label : "Start game",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
-	var option2 = {value:"b", label : "opcja2",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
-	var option3 = {value:"c", label : "opcja3",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
+	var option1 = {value:"a", label : "Normal",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
+	var option2 = {value:"b", label : "Random",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
+	var option3 = {value:"c", label : "Battle",pointer: bombImage ,actv : false, x: ((canvas.clientWidth/2)-20), y : (canvas.clientHeight/2)}
 
 	var menu = [option1,option2,option3];
 
@@ -77,9 +83,9 @@
 			if(option1.actv === true) {
 				document.getElementById('game').submit();
 			} else if(option2.actv === true) {
-				document.getElementById('game').submit();
+				document.getElementById('random').submit();
 			} else if(option3.actv === true) {
-				document.getElementById('game').submit();	
+				document.getElementById('battle').submit();	
 			}
         }
     })

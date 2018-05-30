@@ -17,15 +17,23 @@ app.post('/game', function (req, res) {
     res.sendFile(__dirname + '/client/index.html');
 });
 
-app.get('/random', function (req, res) {
+app.post('/random', function (req, res) {
     res.sendFile(__dirname + '/client/index.html');
     randomMode = true;
 });
 
-app.get('/battle', function (req, res) {
+app.get('/random', function (req, res) {
+    res.sendFile(__dirname + '/client/menu.html');
+});
+
+app.post('/battle', function (req, res) {
     res.sendFile(__dirname + '/client/index.html');
     battleRoyalMode = true;
     zone = 0;
+});
+
+app.get('/battle', function (req, res) {
+    res.sendFile(__dirname + '/client/menu.html');
 });
 
 app.use(express.static(__dirname + '/client'));
