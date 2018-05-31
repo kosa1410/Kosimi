@@ -52,7 +52,8 @@ var room = { link: '3bnr5t', players: {} }
 var _socket = {}
 var _explodes = [];
 var sizeX = 11;
-var map = []
+var map = [];
+var interval = false;
 
 buildMap(0);
 
@@ -139,7 +140,9 @@ const players = {
 var io = require('socket.io')(serv, {});
 io.sockets.on('connection', function (socket) {
     if (PLAYERS_ONLINE === 0) {
-        startInterval();
+        if (interval === false) {
+            startInterval();
+        }
         socket.x = players.player1.x;
         socket.y = players.player1.y;
         socket.player = players.player1.player;
@@ -314,18 +317,22 @@ function generate_events(socket) {
 var game;
 
 function startInterval() {
+    interval = true;
     game = setInterval(forInterval, 1000)
 }
 
 
 function stopInterval() {
+    interval = false;
     clearInterval(game)
 }
 
 
 function forInterval(){
     if(PLAYERS_ONLINE<1){
-        stopInterval();
+        if (interval === true) {
+            stopInterval();
+        }
         t=0;
         battleRoyalMode = false;
         randomMode = false;
