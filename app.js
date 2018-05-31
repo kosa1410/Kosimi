@@ -347,7 +347,7 @@ function forInterval(){
                 if (bomb) {
                     if (bomb.timeToExplode <= t) {
                         map[bomb.x][bomb.y].bomb = false
-                        _socket.bombsUp--;
+                        bomb.owner.bombsUp--;
                         //SOCKET_LIST[_socket.id] = _socket
                         delete bombs[i]
                         generateExplode(bomb)
@@ -504,7 +504,7 @@ function check_if_bomb_is_in_explosion_area() {
                     if (_explodes[i]) {
                         if (bomb.x === _explodes[i][1][j].x && bomb.y === _explodes[i][1][j].y) {
                             map[bomb.x][bomb.y].bomb = false
-                            _socket.bombsUp--;
+                            bomb.owner.bombsUp--;
                             SOCKET_LIST[_socket.id] = _socket
                             delete bombs[bomb_num]
                             generateExplode(bomb)
