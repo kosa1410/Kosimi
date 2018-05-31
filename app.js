@@ -591,26 +591,28 @@ function randomizeMap(){
 }
 
 function battleRoyal(zone){
-    var explodes = [];
+    var explodes = [{ timeToDisappear: undefined }]
+    var explodesToSend = [];
     for (var i = 0; i < sizeX; i++) {
         for (var j = 0; j < sizeX; j++) {
             if(i==zone || i == sizeX - 1 - zone){
                 
                 map[i][j].explode=true;
-                // explodes.push({
-                //     x : i,
-                //     y : j,
-                //     timeToDisappear :30}) <<<< CZEMU TO NIE DZIALA ? TypeError: Cannot read property 'undefined' of undefined
+                explodesToSend.push({
+                    x: i,
+                    y: j
+                })
             }else if (j == zone || j == sizeX - 1 - zone){
                 map[i][j].explode=true;
-                // explodes.push({
-                //     x : i,
-                //     y : j,
-                //     timeToDisappear :30})
+                explodesToSend.push({
+                    x: i,
+                    y: j
+                })
             }
        }
     }
-   // _explodes.push(explodes);
+    explodes.push(explodesToSend);
+    _explodes.push(explodes);
     pack = {map: map};
     io.emit('newPosition', pack);
 }
