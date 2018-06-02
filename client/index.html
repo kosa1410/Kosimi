@@ -4,10 +4,10 @@
 <b><div id="time"></div></b>
 <b><div id="transformation"></div></b>
 <div class="allScore"></div>
-<div class="score p1">Score: 0</div>
-<div class="score p2">Score: 0</div>
-<div class="score p3">Score: 0</div>
-<div class="score p4">Score: 0</div>
+<div id="p1" class="score p1">Score 1: 0</div>
+<div id="p2" class="score p2">Score 2: 0</div>
+<div id="p3" class="score p3">Score 3: 0</div>
+<div id="p4" class="score p4">Score 4: 0</div>
 
 <img src="client/images/bomb.png" style="display: none;" />
 <img src="client/images/player1.png" style="display: none;" />
@@ -118,6 +118,13 @@
     socket.on('setPlayer', function(data) {
         player = data.player;
     });
+    socket.on('setScore', function(data) {
+        document.getElementById('p1').innerHTML = "Score: " + data[0]
+        document.getElementById('p2').innerHTML = "Score: " + data[1]
+        document.getElementById('p3').innerHTML = "Score: " + data[2]
+        document.getElementById('p4').innerHTML = "Score: " + data[3]
+    });
+
 
 
     socket.on('newPosition', function(data) {

@@ -205,6 +205,7 @@ io.sockets.on('connection', function (socket) {
     socket.bombStrength = STARTING_STRENGTH;
     socket.bombLimit = STARTING_BOMB_LIMIT;
     socket.bombsUp = 0;
+    socket.score = 0;
     SOCKET_LIST[socket.id] = socket
     _socket = socket;
     io.emit('updatePlayers', { players: PLAYERS_ONLINE })
@@ -540,7 +541,12 @@ function check_if_user_is_in_explosion_area() {
     }
     if (PLAYERS_ONLINE > 1) {
         if (PLAYERS_ALIVE <= 1) {
-            reset_map()
+            for (var i in SOCKET_LIST){
+                if (SOCKET_LIST[i].dead === false){
+                    SOCKET_LIST[i].score++;
+                }
+           }        
+           reset_map();
         }
     } else {
         if (PLAYERS_ALIVE <= 0) {
@@ -551,13 +557,17 @@ function check_if_user_is_in_explosion_area() {
 
 function reset_map() {
     //stopInterval();
+    var scores = [0,0,0,0];
     PLAYERS_ALIVE = 0;
     _explodes = []
     bombs = []
+    var j=0;
     buildMap(PLAYERS_ALIVE);
     for (var i in SOCKET_LIST) {
         // PLAYERS_ONLINE--
         // SOCKET_LIST[i].emit('finish')
+        scores[j]=SOCKET_LIST[i].score
+        j++;
         SOCKET_LIST[i].x = SOCKET_LIST[i].start.x
         SOCKET_LIST[i].y = SOCKET_LIST[i].start.y
         SOCKET_LIST[i].dead = false;
@@ -567,6 +577,7 @@ function reset_map() {
         SOCKET_LIST[i].bombsUp = 0;
         PLAYERS_ALIVE++;
     }
+    io.emit('setScore',scores);
     //startInterval();
 }
 
