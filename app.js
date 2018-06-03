@@ -14,12 +14,21 @@ app.get('/game', function (req, res) {
 });
 
 app.post('/game', function (req, res) {
-    res.sendFile(__dirname + '/client/index.html');
+    if(battleRoyalMode || randomMode){
+        //TODO weno jebnij tu moze jakis komunikat ?
+    }else{
+        res.sendFile(__dirname + '/client/index.html');
+        normalMode = true;
+    }
 });
 
 app.post('/random', function (req, res) {
-    res.sendFile(__dirname + '/client/index.html');
-    randomMode = true;
+    if(normalMode || battleRoyalMode){
+        //TODO weno jebnij tu moze jakis komunikat ?
+    }else{
+        res.sendFile(__dirname + '/client/index.html');
+        randomMode = true;
+    }
 });
 
 app.get('/random', function (req, res) {
@@ -27,9 +36,13 @@ app.get('/random', function (req, res) {
 });
 
 app.post('/battle', function (req, res) {
-    res.sendFile(__dirname + '/client/index.html');
-    battleRoyalMode = true;
-    zone = 0;
+    if(normalMode || randomMode){
+        //TODO weno jebnij tu moze jakis komunikat ?
+    }else{
+        res.sendFile(__dirname + '/client/index.html');
+        battleRoyalMode = true;
+        zone = 0;
+    }
 });
 
 app.get('/battle', function (req, res) {
@@ -44,6 +57,7 @@ serv.listen(process.env.PORT || 2000);
 console.log('Server started');
 
 var zone;
+var normalMode = false;
 var battleRoyalMode = false;
 var randomMode = false;
 var SOCKET_LIST = {}
