@@ -238,6 +238,11 @@ function generate_events(socket) {
         //     var socket = SOCKET_LIST[i]
         //     socket.emit('updatePlayers', { players: PLAYERS_ONLINE })
         // }
+    
+        io.emit('setScore',{ player: socket.player, score: '-'})
+        io.emit('setBombLimit', { player: socket.player, bL: '-'})
+        io.emit('setBombStrength', { player: socket.player, bS: '-'})
+    
         map[socket.x][socket.y].player = false
         delete SOCKET_LIST[socket.id]
         var pack = { map: map };
@@ -565,13 +570,13 @@ function reset_map() {
     PLAYERS_ALIVE = 0;
     _explodes = []
     bombs = []
-    var j=0;
+    
     buildMap(PLAYERS_ALIVE);
     for (var i in SOCKET_LIST) {
         // PLAYERS_ONLINE--
         // SOCKET_LIST[i].emit('finish')
         //scores[j]=SOCKET_LIST[i].score
-        j++;
+        
         SOCKET_LIST[i].x = SOCKET_LIST[i].start.x
         SOCKET_LIST[i].y = SOCKET_LIST[i].start.y
         SOCKET_LIST[i].dead = false;
