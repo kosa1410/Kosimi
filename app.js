@@ -663,10 +663,12 @@ function check_if_user_is_on_field_with_boost() {
     if (map[_socket.x][_socket.y].bombBoost) {
         map[_socket.x][_socket.y].bombBoost = false;
         _socket.bombLimit++;
+        io.emit("setBombLimit", {player: _socket.player, bL: _socket.bombLimit});
         SOCKET_LIST[_socket.id] = _socket
     } else if (map[_socket.x][_socket.y].strengthBoost) {
         map[_socket.x][_socket.y].strengthBoost = false;
         _socket.bombStrength++;
+        io.emit("setBombStrength", {player: _socket.player, bS: _socket.bombStrength});
         SOCKET_LIST[_socket.id] = _socket
     }
 }
