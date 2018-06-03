@@ -2,29 +2,29 @@
     <tr style="height: 11.7%; width: 100%">
        <td style="border:1px solid; text-align: center">
           <div id="p4">  Score: - </div>
-          <div id="bl4"> Bomb Limit: 1 </div>
-          <div id="bs4"> Bomb Strength: 1 </div>
+          <div id="bl4"> Bomb Limit: - </div>
+          <div id="bs4"> Bomb Strength: - </div>
         </td>
        <td style="width: 20%"></td>
        <td style="border:1px solid; text-align: center">
         <div id="p3">  Score: - </div>
-        <div id="bl3"> Bomb Limit: 1 </div>
-        <div id="bs3"> Bomb Strength: 1 </div>
+        <div id="bl3"> Bomb Limit: - </div>
+        <div id="bs3"> Bomb Strength: - </div>
         </td>
    </tr>
    <tr style="height: 50%"></tr>
    <tr style="height: 12.3%; width: 100%">
        <td style="border:1px solid; text-align: center">
         <div id="p1">  Score: - </div>
-        <div id="bl1"> Bomb Limit: 1 </div>
-        <div id="bs1"> Bomb Strength: 1 </div>
+        <div id="bl1"> Bomb Limit: - </div>
+        <div id="bs1"> Bomb Strength: - </div>
     
         </td>
        <td style="width: 20%"></td>
        <td style="border:1px solid; text-align: center">
         <div id="p2">  Score: - </div>
-        <div id="bl2"> Bomb Limit: 1 </div>
-        <div id="bs2"> Bomb Strength: 1 </div>
+        <div id="bl2"> Bomb Limit: - </div>
+        <div id="bs2"> Bomb Strength: - </div>
         </td>
    </tr>
 </table>​
@@ -125,11 +125,30 @@
         player = data.player;
     });
     socket.on('setScore', function(data) {
-        document.getElementById('p1').innerHTML = "Score: " + data[0]
-        document.getElementById('p2').innerHTML = "Score: " + data[1]
-        document.getElementById('p3').innerHTML = "Score: " + data[2]
-        document.getElementById('p4').innerHTML = "Score: " + data[3]
+        switch(data.player){
+            case "player1":
+            {
+                document.getElementById('p1').innerHTML = "Score: " + data.score
+                break;
+            }
+            case "player2":
+            {
+                document.getElementById('p2').innerHTML = "Score: " + data.score
+                break;
+            }
+            case "player3":
+            {
+                document.getElementById('p3').innerHTML = "Score: " + data.score
+                break;
+            }
+            case "player4":
+            {
+                document.getElementById('p4').innerHTML = "Score: " + data.score
+                break;
+            }
+        }
     });
+
     socket.on('setBombLimit', function(data) {
         switch(data.player){
             case "player1":

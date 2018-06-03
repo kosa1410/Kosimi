@@ -192,6 +192,8 @@ io.sockets.on('connection', function (socket) {
         socket.x = sizeX - 1;
         socket.y = 0;
     }
+
+    
     socket.emit('setPlayer', { player: socket.player });
     socket.start = {
         x: socket.x,
@@ -211,10 +213,12 @@ io.sockets.on('connection', function (socket) {
     io.emit('updatePlayers', { players: PLAYERS_ONLINE })
     io.emit('updatePlayersAlive', { players: PLAYERS_ALIVE })
 
-    // for (var i in SOCKET_LIST) {
-    //     var socket = SOCKET_LIST[i]
-    //     socket.emit('updatePlayers', { players: PLAYERS_ONLINE })
-    // }
+    for (var i in SOCKET_LIST) {
+        var socket = SOCKET_LIST[i]
+        io.emit('setScore',{ player: socket.player, score: socket.score})
+        io.emit('setBombLimit', { player: socket.player, bL: socket.bombLimit})
+        io.emit('setBombStrength', { player: socket.player, bS: socket.bombStrength})
+    }
     console.log("new socket connected")
     map[socket.x][socket.y].player = socket.player;
     pack = { map: map }
@@ -566,7 +570,7 @@ function reset_map() {
     for (var i in SOCKET_LIST) {
         // PLAYERS_ONLINE--
         // SOCKET_LIST[i].emit('finish')
-        scores[j]=SOCKET_LIST[i].score
+        //scores[j]=SOCKET_LIST[i].score
         j++;
         SOCKET_LIST[i].x = SOCKET_LIST[i].start.x
         SOCKET_LIST[i].y = SOCKET_LIST[i].start.y
@@ -576,8 +580,14 @@ function reset_map() {
         SOCKET_LIST[i].bombStrength = STARTING_STRENGTH;
         SOCKET_LIST[i].bombsUp = 0;
         PLAYERS_ALIVE++;
+    
+        var socket = SOCKET_LIST[i]
+        io.emit('setScore',{ player: socket.player, score: socket.score})
+        io.emit('setBombLimit', { player: socket.player, bL: socket.bombLimit})
+        io.emit('setBombStrength', { player: socket.player, bS: socket.bombStrength})
+        
     }
-    io.emit('setScore',scores);
+    
     //startInterval();
 }
 
@@ -665,7 +675,7 @@ function check_if_user_is_on_field_with_boost() {
         _socket.bombLimit++;
         io.emit("setBombLimit", {player: _socket.player, bL: _socket.bombLimit});
         SOCKET_LIST[_socket.id] = _socket
-    } else if (map[_socket.x][_socket.y].strengthBoost) {
+    } else if (map[_socket.x][_socket.y].strengthBoost){ 
         map[_socket.x][_socket.y].strengthBoost = false;
         _socket.bombStrength++;
         io.emit("setBombStrength", {player: _socket.player, bS: _socket.bombStrength});
