@@ -14,17 +14,22 @@ app.get('/game', function (req, res) {
 });
 
 app.post('/game', function (req, res) {
-    if(battleRoyalMode || randomMode){
-        //TODO weno jebnij tu moze jakis komunikat ?
-    }else{
+    if(battleRoyalMode){
+        res.sendFile(__dirname + '/client/menu.html');
+        io.emit('badMode', { error: 'Battle Royal mode is currently open' })
+    } else if (randomMode) {
+        io.emit('badMode', { error: 'Random mode is currently open' })
+    } else {
         res.sendFile(__dirname + '/client/index.html');
         normalMode = true;
     }
 });
 
 app.post('/random', function (req, res) {
-    if(normalMode || battleRoyalMode){
-        //TODO weno jebnij tu moze jakis komunikat ?
+    if(battleRoyalMode){
+        io.emit('badMode', { error: 'Battle Royal mode is currently open' })
+    } else if (normalMode) {
+        io.emit('badMode', { error: 'Normal mode is currently open' })
     }else{
         res.sendFile(__dirname + '/client/index.html');
         randomMode = true;
@@ -36,8 +41,10 @@ app.get('/random', function (req, res) {
 });
 
 app.post('/battle', function (req, res) {
-    if(normalMode || randomMode){
-        //TODO weno jebnij tu moze jakis komunikat ?
+    if(normalMode) {
+        io.emit('badMode', { error: 'Normal mode is currently open' })
+    } else if (randomMode) {
+        io.emit('badMode', { error: 'Random mode is currently open' })
     }else{
         res.sendFile(__dirname + '/client/index.html');
         battleRoyalMode = true;
