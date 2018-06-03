@@ -14,25 +14,34 @@ app.get('/game', function (req, res) {
 });
 
 app.post('/game', function (req, res) {
-    if(battleRoyalMode){
-        res.sendFile(__dirname + '/client/menu.html');
-        io.emit('badMode', { error: 'Battle Royal mode is currently open' })
-    } else if (randomMode) {
-        io.emit('badMode', { error: 'Random mode is currently open' })
-    } else {
-        res.sendFile(__dirname + '/client/index.html');
-        normalMode = true;
+    if(PLAYERS_ONLINE>=4){
+        io.emit('badMode', { error: 'Game is full' })
+    }else {
+        if(battleRoyalMode){
+            res.sendFile(__dirname + '/client/menu.html');
+            io.emit('badMode', { error: 'Battle Royal mode is currently open' })
+        } else if (randomMode) {
+            io.emit('badMode', { error: 'Random mode is currently open' })
+        } else {
+            res.sendFile(__dirname + '/client/index.html');
+            normalMode = true;
+        }
     }
 });
 
 app.post('/random', function (req, res) {
-    if(battleRoyalMode){
-        io.emit('badMode', { error: 'Battle Royal mode is currently open' })
-    } else if (normalMode) {
-        io.emit('badMode', { error: 'Normal mode is currently open' })
-    }else{
-        res.sendFile(__dirname + '/client/index.html');
-        randomMode = true;
+    
+    if(PLAYERS_ONLINE>=4){
+        io.emit('badMode', { error: 'Game is full' })
+    }else {
+        if(battleRoyalMode){
+            io.emit('badMode', { error: 'Battle Royal mode is currently open' })
+        } else if (normalMode) {
+            io.emit('badMode', { error: 'Normal mode is currently open' })
+        }else{
+            res.sendFile(__dirname + '/client/index.html');
+            randomMode = true;
+        }
     }
 });
 
@@ -41,14 +50,19 @@ app.get('/random', function (req, res) {
 });
 
 app.post('/battle', function (req, res) {
-    if(normalMode) {
-        io.emit('badMode', { error: 'Normal mode is currently open' })
-    } else if (randomMode) {
-        io.emit('badMode', { error: 'Random mode is currently open' })
-    }else{
-        res.sendFile(__dirname + '/client/index.html');
-        battleRoyalMode = true;
-        zone = 0;
+    
+    if(PLAYERS_ONLINE>=4){
+        io.emit('badMode', { error: 'Game is full' })
+    }else {
+        if(normalMode) {
+            io.emit('badMode', { error: 'Normal mode is currently open' })
+        } else if (randomMode) {
+            io.emit('badMode', { error: 'Random mode is currently open' })
+        }else{
+            res.sendFile(__dirname + '/client/index.html');
+            battleRoyalMode = true;
+            zone = 0;
+        }
     }
 });
 
